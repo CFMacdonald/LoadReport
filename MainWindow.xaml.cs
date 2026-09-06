@@ -1,4 +1,5 @@
-﻿using LoadReport.Models;
+﻿using LoadReport.Main;
+using LoadReport.Models;
 using System.Windows;
 using System.Windows.Media;
 
@@ -15,13 +16,26 @@ public partial class MainWindow : Window
     int numberOfBeds;
     int initalOutage;
     int internalDiamater;
+    Project project;
 
     public MainWindow()
     {
         InitializeComponent();
+        project = new Project();
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)
+    {
+
+        NewLayerWindow newLayerWindow = new NewLayerWindow();
+        newLayerWindow.Show();
+        if (newLayerWindow.layerCreated)
+        {
+            project.AddLayer(newLayerWindow.NewLayer);
+        }
+    }
+
+    private void Generate_Button_Click(object sender, RoutedEventArgs e)
     {
         bool checkJobDes = ValidateJobDescription();
         bool checkJobNumber = ValidateJobNumber();
@@ -32,12 +46,11 @@ public partial class MainWindow : Window
         bool checkOutage = ValidateInitalOutage();
         bool checkInternalDiameter = ValidateInternalDiameter();
 
-        if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter)
+        if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter && !project.VesselCreated)
         {
-            Vessel vessel = new Vessel(jobDescription!,jobNumber!,clientName!,clientAddress!,vesselType!,numberOfBeds,initalOutage,internalDiamater);
-            NewLayerWindow newLayerWindow = new NewLayerWindow();
-            newLayerWindow.Show();
-        }     
+            Vessel vessel = new Vessel(jobDescription!, jobNumber!, clientName!, clientAddress!, vesselType!, numberOfBeds, initalOutage, internalDiamater);
+            project.InitialiseVessel(vessel);
+        }
     }
 
     bool ValidateJobDescription()
@@ -114,20 +127,20 @@ public partial class MainWindow : Window
     bool ValidateNumberOfBeds()
     {
         var selectedItem = BedNumberComboBox.SelectionBoxItem;
-       
-            bool pass = Int32.TryParse(selectedItem.ToString(), out numberOfBeds);
-            if (pass)
-            {
-                BedNumberTextBlock.Foreground = Brushes.Black;
-                return true;
-            }
-            else 
-            { 
-            BedNumberTextBlock.Foreground= Brushes.Red;
-                return false; 
-            }
-        
-    }              
+
+        bool pass = Int32.TryParse(selectedItem.ToString(), out numberOfBeds);
+        if (pass)
+        {
+            BedNumberTextBlock.Foreground = Brushes.Black;
+            return true;
+        }
+        else
+        {
+            BedNumberTextBlock.Foreground = Brushes.Red;
+            return false;
+        }
+
+    }
     bool ValidateInitalOutage()
     {
         bool pass = Int32.TryParse(InitialOutageTextBox.Text, out initalOutage);
@@ -159,4 +172,5 @@ public partial class MainWindow : Window
     }
 }
 
-    
+   
+

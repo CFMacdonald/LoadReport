@@ -10,7 +10,7 @@ internal class Vessel
     int BedNumber {  get; set; }
     int InitialOutage { get; set; }
     int InternalDiameter {  get; set; }
-    List<Layer> Layers { get; set; }
+   
    
     public Vessel(string jobDescription, string jobNumber, string clientName, string clientAddress, string vesselType, int bedNumber, int initialOutage, int internalDiameter)
     {
@@ -22,13 +22,6 @@ internal class Vessel
         BedNumber = bedNumber;
         InitialOutage = initialOutage;
         InternalDiameter = internalDiameter;
-        Layers = new List<Layer>();
-    }
-
-
-    public void AddLayer(Layer layer)
-    {
-        Layers.Add(layer);
     }
 }
 

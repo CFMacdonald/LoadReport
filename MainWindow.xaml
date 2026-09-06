@@ -104,7 +104,7 @@
             <TextBlock Text="Report" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="14"/>
         </StackPanel>
         <StackPanel  Grid.Row="15">
-            <Button Content=" Generate " Margin="10,5,0,5" HorizontalAlignment="Center" Click="GenerateButton_Click"/>
+            <Button Content=" Generate " Margin="10,5,0,5" HorizontalAlignment="Center" Click="Generate_Button_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,6 +1,6 @@
 ﻿namespace LoadReport.Models;
 
-internal class Layer
+public class Layer
 {
     string? LayerType {  get; set; }
     string? ProductName {  get; set; }
