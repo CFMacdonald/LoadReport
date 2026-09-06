@@ -1,0 +1,110 @@
+﻿<Window x:Class="LoadReport.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoadReport"
+        mc:Ignorable="d"
+        Title="Load Report Generator" Height="650" Width="470">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Title-->
+        <TextBlock Text="Load Report Generator" FontSize="24" FontWeight="Bold" Margin="10" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal"  Grid.Row="1">
+        <TextBlock Text="Project Information" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="1"/>  
+        </StackPanel>
+        <!-- Job Description -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="2">
+            <TextBlock x:Name="JobDescriptionTextBlock" Text="Job Description:"  Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="JobDescriptionTextBox"  Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Job Number -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="3">  
+        <TextBlock x:Name="JobNumberTextBlock" Text="Job Number:" Margin="10,5,0,5"  Width="100" />
+        <TextBox x:Name="JobNumberTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Client Name -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="4">  
+        <TextBlock x:Name="ClientNameTextBlock" Text="Client Name:" Margin="10,5,0,5"  Width="100" />
+        <TextBox x:Name="ClientNameTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Client Address -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="5">  
+        <TextBlock x:Name="ClientAddressTextBlock" Text="Client Address:" Margin="10,5,0,5"  Width="100" />
+        <TextBox x:Name="ClientAddressTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>   
+        <!-- Vessel Type -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="6">
+            <TextBlock x:Name="VesselTypeTextBlock" Text="Vessel Type:"  Margin="10,5,0,5"  Width="100" />
+            <ComboBox x:Name="VesselTypeComboBox"  Margin="10,5,0,5"  Width="300">
+                <ComboBoxItem Content="Single Bed"/>
+                <ComboBoxItem Content="Multi Bed"/>
+                <ComboBoxItem Content="Reformer Tube"/>
+                <ComboBoxItem Content="Secondary Reformer"/>
+                <ComboBoxItem Content="CCR"/>
+            </ComboBox>
+        </StackPanel>
+        <!-- Bed Number -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="7">
+            <TextBlock x:Name="BedNumberTextBlock" Text="Number of Beds:"  Margin="10,5,0,5"  Width="100" />
+            <ComboBox x:Name="BedNumberComboBox"  Margin="10,5,0,5"  Width="300">
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+            </ComboBox>
+        </StackPanel>
+        <!-- Initial Outage -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="8">  
+        <TextBlock x:Name="InitialOutageTextBlock" Text="Initial Outage:" Margin="10,5,0,5"  Width="100" />
+        <TextBox x:Name="InitialOutageTextBox" Margin="10,5,0,5"   Width="300"/>
+        <TextBlock Text="mm" Margin="2,10,0,0" Grid.Row="8" Width="auto" />
+        </StackPanel>   
+        <!-- Internal Diameter -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="9">  
+        <TextBlock x:Name="InternalDiameterTextBlock" Text="Internal Diameter:" Margin="10,5,0,5"  Width="100" />
+        <TextBox x:Name="InternalDiameterTextBox" Margin="10,5,0,5"  Width="300"/>
+        <TextBlock Text="mm" Margin="2,10,0,0"  Width="auto" />
+        </StackPanel>
+        <!-- Media Layer Info -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="10">
+            <TextBlock Text="Media Layer" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" />
+        </StackPanel>
+        <!-- Media Layer Add -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="11">
+            <TextBlock Text="Media Layer:" Margin="10,5,0,5"  Width="100" />
+            <Button Content=" Add Layer " Margin="10,5,0,5" Click="LayerButton_Click" />
+        </StackPanel>
+        <!-- Media Layer View-->
+        <StackPanel Orientation="Horizontal"  Grid.Row="12">
+            <TextBlock Text="Layers:" Margin="10,5,0,5"  Width="100" />
+            <ListBox x:Name="LayerListBox" Margin="10,5,0,5" Width="300" Height="200"/> 
+        </StackPanel>
+        <!-- Generate Report -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="14">
+            <TextBlock Text="Report" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="14"/>
+        </StackPanel>
+        <StackPanel  Grid.Row="15">
+            <Button Content=" Generate " Margin="10,5,0,5" HorizontalAlignment="Center" Click="GenerateButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

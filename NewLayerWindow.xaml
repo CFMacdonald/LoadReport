@@ -1,0 +1,81 @@
+﻿<Window x:Class="LoadReport.NewLayerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoadReport"
+        mc:Ignorable="d"
+        Title="Add New Layer" Height="350" Width="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Title-->
+        <TextBlock Text="Add Layer" FontSize="24" FontWeight="Bold" Margin="10" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal"  Grid.Row="1">
+            <TextBlock Text="Layer Information" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="1"/>
+        </StackPanel>
+        <!-- Layer Type -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="2">
+            <TextBlock x:Name="LayerTypeTextBlock" Text="Layer Type:"  Margin="10,5,0,5"  Width="100" />
+            <ComboBox x:Name="LayerTypeComboBox"  Margin="10,5,0,5"  Width="300">
+                <ComboBoxItem Content="Catalyst"/>
+                <ComboBoxItem Content="Media"/>
+                <ComboBoxItem Content="Support"/>
+                <ComboBoxItem Content="Tray"/>
+            </ComboBox>
+        </StackPanel>
+        <!-- Product Name -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="3">
+            <TextBlock x:Name="ProductNameTextBlock" Text="Product Name:" Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="ProductNameTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Actual Outage -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="4">
+            <TextBlock x:Name="ActualOutageTextBlock" Text="Actual Outage:" Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="ActualOutageTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Target Outage -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="5">
+            <TextBlock x:Name="TargetOutageTextBlock" Text="Target Outage:" Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="TargetOutageTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Drum Quantity -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="6">
+            <TextBlock x:Name="DrumQuantityTextBlock" Text="Drum Quantity:" Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="DrumQuantityTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Drum Net Weight -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="7">
+            <TextBlock x:Name="DrumNetWeightTextBlock" Text="Drum Net Weight:" Margin="10,5,0,5"  Width="100" />
+            <TextBox x:Name="DrumNetWeightTextBox" Margin="10,5,0,5"  Width="300"/>
+        </StackPanel>
+        <!-- Load Method -->
+        <StackPanel Orientation="Horizontal"  Grid.Row="8">
+        <TextBlock x:Name="LoadMethodTextBlock" Text="Load Method:"  Margin="10,5,0,5"  Width="100" />
+        <ComboBox x:Name="LoadMethodComboBox"  Margin="10,5,0,5"  Width="300">
+            <ComboBoxItem Content="Sock"/>
+            <ComboBoxItem Content="Dense"/>
+            <ComboBoxItem Content="Static Dense"/>
+            <ComboBoxItem Content="Bucket"/>
+                <ComboBoxItem Content="N/A"/>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="11">
+            <Button Content=" Add " Margin="10,5,0,5" Click="AddLayerConfirm_Click" />
+        </StackPanel>
+
+    </Grid>
+</Window>
