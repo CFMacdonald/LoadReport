@@ -5,7 +5,6 @@ using System.Windows.Media;
 
 namespace LoadReport;
 
-
 public partial class MainWindow : Window
 {
     string? jobDescription;
@@ -25,14 +24,13 @@ public partial class MainWindow : Window
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)
-    {
-
+    {      
         NewLayerWindow newLayerWindow = new NewLayerWindow();
         newLayerWindow.Show();
-        if (newLayerWindow.layerCreated)
-        {
-            project.AddLayer(newLayerWindow.NewLayer);
-        }
+        newLayerWindow.GetProject(project);
+        newLayerWindow.GetMainWindow(this);
+        ButtonRemoveLayer.BorderBrush = Brushes.Black;
+
     }
 
     private void Generate_Button_Click(object sender, RoutedEventArgs e)
@@ -50,6 +48,7 @@ public partial class MainWindow : Window
         {
             Vessel vessel = new Vessel(jobDescription!, jobNumber!, clientName!, clientAddress!, vesselType!, numberOfBeds, initalOutage, internalDiamater);
             project.InitialiseVessel(vessel);
+            project.DebugLayers();
         }
     }
 
@@ -111,8 +110,8 @@ public partial class MainWindow : Window
     }
     bool ValidateVesselType()
     {
-        var selectedItem = VesselTypeComboBox.SelectedItem;
-        if (selectedItem == null)
+        var selectedItem = VesselTypeComboBox.SelectionBoxItem.ToString();
+        if (selectedItem == "")
         {
             VesselTypeTextBlock.Foreground = Brushes.Red;
             return false;
@@ -120,7 +119,7 @@ public partial class MainWindow : Window
         else
         {
             VesselTypeTextBlock.Foreground = Brushes.Black;
-            vesselType = selectedItem.ToString();
+            vesselType = selectedItem;
             return true;
         }
     }
@@ -170,7 +169,31 @@ public partial class MainWindow : Window
             return false;
         }
     }
+   
+    public void RefreshDisplay()
+    {
+        int lastEntry = project.Layers.Count - 1;
+
+        Layer layer = project.Layers[lastEntry];
+
+        LayerListBox.Items.Add($"Layer: {lastEntry + 1} {layer.LayerType} {layer.ProductName} Outage: {layer.ActualOutage}mm ");
+    }
+
+    private void RemoveLayer_Click(object sender, RoutedEventArgs e)
+    {    
+        int lastEntry = project.Layers.Count - 1;
+        if (lastEntry >= 0)
+        {
+            LayerListBox.Items.RemoveAt(lastEntry);
+            project.RemoveLayer();
+            lastEntry--;
+        }
+        else
+        {
+            ButtonRemoveLayer.BorderBrush = Brushes.Red;
+        }
+    }
 }
 
-   
+
 

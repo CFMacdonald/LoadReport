@@ -1,4 +1,5 @@
-﻿using LoadReport.Models;
+﻿using LoadReport.Main;
+using LoadReport.Models;
 using System.Windows;
 using System.Windows.Media;
 
@@ -16,7 +17,9 @@ public partial class NewLayerWindow : Window
     double drumNetWeight;
     string? loadMethod;
     public Layer NewLayer {  get; set; }
-    public bool layerCreated { get; private set; } = false; 
+    public bool layerCreated { get; private set; } = false;
+    Project _project;
+    MainWindow _mainWindow;
 
     public NewLayerWindow()
     {
@@ -36,13 +39,14 @@ public partial class NewLayerWindow : Window
         if (checkLayer && checkName && checkTarget && checkActual && checkWeight && checkQuanity && checkMethod)
         {  
             NewLayer = new Layer(layerType!, productName, actualOutage, targetOutage, drumQuanity, drumNetWeight, loadMethod!);
-            layerCreated = true;
+            _project.AddLayer(NewLayer);
+            _mainWindow.RefreshDisplay();        
             Close();
         }
     }
         bool ValidateLayerType()
         {
-        var selectedItem = LayerTypeComboBox.SelectedItem;
+        var selectedItem = LayerTypeComboBox.SelectionBoxItem;
         if (selectedItem == null)
         {
             LayerTypeTextBlock.Foreground = Brushes.Red;
@@ -127,7 +131,7 @@ public partial class NewLayerWindow : Window
         }
         bool ValidateLoadingMethod()
         {
-            var selectedItem = LoadMethodComboBox.SelectedItem;
+        var selectedItem = LoadMethodComboBox.SelectionBoxItem;
             if (selectedItem == null)
             {
                 LoadMethodTextBlock.Foreground = Brushes.Red;
@@ -139,9 +143,15 @@ public partial class NewLayerWindow : Window
                 loadMethod = selectedItem.ToString();
                 return true;
             }
-
         }
-   
+    public void GetProject(Project project)
+    {
+        _project = project;
+    }
+    public void GetMainWindow(MainWindow window)
+    {
+        _mainWindow = window;
+    }
     }
 
 

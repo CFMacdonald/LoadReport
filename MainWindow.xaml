@@ -89,15 +89,16 @@
         <StackPanel Orientation="Horizontal"  Grid.Row="10">
             <TextBlock Text="Media Layer" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" />
         </StackPanel>
-        <!-- Media Layer Add -->
+        <!-- Media Layer Add /  Remove -->
         <StackPanel Orientation="Horizontal"  Grid.Row="11">
             <TextBlock Text="Media Layer:" Margin="10,5,0,5"  Width="100" />
             <Button Content=" Add Layer " Margin="10,5,0,5" Click="LayerButton_Click" />
+            <Button x:Name="ButtonRemoveLayer" Content=" Remove Last " Margin="10,5,0,5" Click="RemoveLayer_Click" />
         </StackPanel>
         <!-- Media Layer View-->
         <StackPanel Orientation="Horizontal"  Grid.Row="12">
             <TextBlock Text="Layers:" Margin="10,5,0,5"  Width="100" />
-            <ListBox x:Name="LayerListBox" Margin="10,5,0,5" Width="300" Height="200"/> 
+            <ListBox x:Name="LayerListBox" Margin="10,5,0,5" Width="300" Height="200" /> 
         </StackPanel>
         <!-- Generate Report -->
         <StackPanel Orientation="Horizontal"  Grid.Row="14">

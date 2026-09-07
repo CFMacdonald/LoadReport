@@ -1,6 +1,6 @@
 ﻿namespace LoadReport.Models;
 
-internal class Vessel
+public class Vessel
 {
     string? JobDescription {  get; set; }
     string? JobNumber {  get; set; }

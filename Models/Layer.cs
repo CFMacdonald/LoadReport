@@ -2,9 +2,9 @@
 
 public class Layer
 {
-    string? LayerType {  get; set; }
-    string? ProductName {  get; set; }
-    int ActualOutage { get; set; }
+    public string? LayerType {  get; private set; }
+    public string? ProductName {  get; private set; }
+    public int ActualOutage { get; private set; }
     int TargetOutage { get; set; }
     double DrumQuanity { get; set; }
     double DrumNetWeight { get; set; }
