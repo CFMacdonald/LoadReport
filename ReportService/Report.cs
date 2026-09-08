@@ -168,7 +168,7 @@ public class Report
             table.Cell().Element(CellStyle).Text($"{layer.DrumNetWeight} kg");
             // Layer Density
             table.Cell().Element(CellStyle).Text("Layer Density");
-            table.Cell().Element(CellStyle).Text($"{Placeholders.Integer()} kg/m3");
+            table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerDensity(layer):F2} kg/m3");
 
             static IContainer CellStyle(IContainer container)
                 => container.Border(0.4f, Unit.Point).Padding(1);

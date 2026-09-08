@@ -10,6 +10,8 @@ public class VesselManager
     public List<Layer> Layers { get; private set; }
     public bool VesselCreated {  get; private set; }
 
+    float _currentOutage; 
+
     public VesselManager()
     {
         Layers = new List<Layer>();
@@ -20,6 +22,7 @@ public class VesselManager
     {
         Vessel = vessel;
         VesselCreated = true;
+       _currentOutage = Vessel.InitialOutage;
     }
     public void GenerateReport(VesselManager project)
     {
@@ -34,7 +37,30 @@ public class VesselManager
     {
         Layers.RemoveAt(Layers.Count - 1);
     }
-     
+
+   double CalculateLayerHeight(Layer layer)
+   {       
+        double bedHeight = _currentOutage - layer.ActualOutage;
+        _currentOutage = layer.ActualOutage;
+        return bedHeight / 1000;
+   }
+    double CalculateLayerVolume(Layer layer)
+    {
+        double radius = (Vessel.InternalDiameter / 1000.0) / 2;
+        double area = Math.PI * (radius * radius);
+        double volume = area * CalculateLayerHeight(layer);
+        return volume;
+    }
+    double CalculateLayerMass(Layer layer)
+    {
+        double mass = layer.DrumNetWeight * layer.DrumQuanity;
+        return mass;
+    }
+    public double CalculateLayerDensity(Layer layer)
+    {
+        double density = CalculateLayerMass(layer) / CalculateLayerVolume(layer);
+        return density;
+    }
 }
 
 
