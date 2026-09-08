@@ -9,6 +9,7 @@ public class Layer
     public double DrumQuanity { get; private set; }
     public double DrumNetWeight { get; private set; }
     public string? LoadMethod { get; private set; }
+    public int LayerDensety { get; private set; }
 
     public Layer(string layerType, string productName, int actualOutage, int targetOutage, double drumQuanity, double drumNetWeight, string loadMethod)
     {
@@ -21,4 +22,5 @@ public class Layer
         LoadMethod = loadMethod;
     }
 
+    
 }

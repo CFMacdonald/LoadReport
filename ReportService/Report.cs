@@ -13,11 +13,11 @@ public class Report
         QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
     }
 
-    Project _project;
+    VesselManager _vesselManager;
     
-    public Report(Project project)
+    public Report(VesselManager vesselManager)
     {
-        _project = project;
+        _vesselManager = vesselManager;
         GenerateReport();
     }
 
@@ -94,23 +94,23 @@ public class Report
         table.Cell().Element(CellStyle).Text($"{Placeholders.Integer()}");
         // Vessel Type
         table.Cell().Element(CellStyle).Text("Vessel Type:");
-        table.Cell().Element(CellStyle).Text($"_{_project.Vessel.VesselType}_");
+        table.Cell().Element(CellStyle).Text($"_{_vesselManager.Vessel.VesselType}_");
         // Bed Number
         table.Cell().Element(CellStyle).Text("Number of Beds:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.BedNumber}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.BedNumber}");
         // Initial Outage
         table.Cell().Element(CellStyle).Text("Initial Outage:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.InitialOutage} mm");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.InitialOutage} mm");
         // Internal Diameter:
         table.Cell().Element(CellStyle).Text("Internal Diameter:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.InternalDiameter} mm");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.InternalDiameter} mm");
         // Load Information
         table.Cell().ColumnSpan(2)
             .Background(Colors.Grey.Lighten2).Element(CellStyle)
             .Text("Load Information:");
         // Number of Layers
         table.Cell().Element(CellStyle).Text("Total Number of Layers:");
-        table.Cell().Element(CellStyle).Text($"{_project.Layers.Count}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Layers.Count}");
 
         static IContainer CellStyle(IContainer container)
             => container.Border(0.4f, Unit.Point).Padding(1);
@@ -123,16 +123,16 @@ public class Report
             .Text("Project Information:");
         // Job Description
         table.Cell().Element(CellStyle).Text("Job Description:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.JobDescription}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.JobDescription}");
         // Job Location
         table.Cell().Element(CellStyle).Text("Job Number:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.JobNumber}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.JobNumber}");
         // Client Name
         table.Cell().Element(CellStyle).Text("Client Name:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.ClientName}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.ClientName}");
         // Client Address
         table.Cell().Element(CellStyle).Text("Client Location:");
-        table.Cell().Element(CellStyle).Text($"{_project.Vessel.ClientAddress}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.ClientAddress}");
 
         static IContainer CellStyle(IContainer container)
                 => container.Border(0.4f, Unit.Point).Padding(1);
@@ -140,7 +140,7 @@ public class Report
     void DisplayLayers(TableDescriptor table)
     {
         int layerNum = 1;
-        foreach (var layer in _project.Layers)
+        foreach (var layer in _vesselManager.Layers)
         {     
             // Layer Number
             table.Cell().ColumnSpan(2)

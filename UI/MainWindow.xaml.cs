@@ -15,19 +15,19 @@ public partial class MainWindow : Window
     int numberOfBeds;
     int initalOutage;
     int internalDiamater;
-    Project project;
+    VesselManager vesselManager;
 
     public MainWindow()
     {
         InitializeComponent();
-        project = new Project();
+        vesselManager = new VesselManager();
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)
     {      
         NewLayerWindow newLayerWindow = new NewLayerWindow();
         newLayerWindow.Show();
-        newLayerWindow.GetProject(project);
+        newLayerWindow.GetVesselManager(vesselManager);
         newLayerWindow.GetMainWindow(this);
         ButtonRemoveLayer.BorderBrush = Brushes.Black;
 
@@ -44,11 +44,11 @@ public partial class MainWindow : Window
         bool checkOutage = ValidateInitalOutage();
         bool checkInternalDiameter = ValidateInternalDiameter();
 
-        if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter && !project.VesselCreated)
+        if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter && !vesselManager.VesselCreated)
         {
             Vessel vessel = new Vessel(jobDescription!, jobNumber!, clientName!, clientAddress!, vesselType!, numberOfBeds, initalOutage, internalDiamater);
-            project.InitialiseVessel(vessel);   
-            project.GenerateReport(project);
+            vesselManager.InitialiseVessel(vessel);   
+            vesselManager.GenerateReport(vesselManager);
         }
     }
 
@@ -172,20 +172,20 @@ public partial class MainWindow : Window
    
     public void RefreshDisplay()
     {
-        int lastEntry = project.Layers.Count - 1;
+        int lastEntry = vesselManager.Layers.Count - 1;
 
-        Layer layer = project.Layers[lastEntry];
+        Layer layer = vesselManager.Layers[lastEntry];
 
         LayerListBox.Items.Add($"Layer: {lastEntry + 1} {layer.LayerType} {layer.ProductName} Outage: {layer.ActualOutage}mm ");
     }
 
     private void RemoveLayer_Click(object sender, RoutedEventArgs e)
     {    
-        int lastEntry = project.Layers.Count - 1;
+        int lastEntry = vesselManager.Layers.Count - 1;
         if (lastEntry >= 0)
         {
             LayerListBox.Items.RemoveAt(lastEntry);
-            project.RemoveLayer();
+            vesselManager.RemoveLayer();
             lastEntry--;
         }
         else

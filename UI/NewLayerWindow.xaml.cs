@@ -18,7 +18,7 @@ public partial class NewLayerWindow : Window
     string? loadMethod;
     public Layer NewLayer {  get; set; }
     public bool layerCreated { get; private set; } = false;
-    Project _project;
+    VesselManager _vesselManager;
     MainWindow _mainWindow;
 
     public NewLayerWindow()
@@ -39,7 +39,7 @@ public partial class NewLayerWindow : Window
         if (checkLayer && checkName && checkTarget && checkActual && checkWeight && checkQuanity && checkMethod)
         {  
             NewLayer = new Layer(layerType!, productName, actualOutage, targetOutage, drumQuanity, drumNetWeight, loadMethod!);
-            _project.AddLayer(NewLayer);
+            _vesselManager.AddLayer(NewLayer);
             _mainWindow.RefreshDisplay();        
             Close();
         }
@@ -144,9 +144,9 @@ public partial class NewLayerWindow : Window
                 return true;
             }
         }
-    public void GetProject(Project project)
+    public void GetVesselManager(VesselManager vesselManager)
     {
-        _project = project;
+        _vesselManager = vesselManager;
     }
     public void GetMainWindow(MainWindow window)
     {

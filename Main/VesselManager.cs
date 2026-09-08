@@ -3,14 +3,14 @@ using LoadReport.ReportService;
 
 namespace LoadReport.Main;
 
-public class Project
+public class VesselManager
 {
     public Vessel Vessel { get; private set; }
     public Report Report { get; private set; }
     public List<Layer> Layers { get; private set; }
     public bool VesselCreated {  get; private set; }
 
-    public Project()
+    public VesselManager()
     {
         Layers = new List<Layer>();
        
@@ -21,7 +21,7 @@ public class Project
         Vessel = vessel;
         VesselCreated = true;
     }
-    public void GenerateReport(Project project)
+    public void GenerateReport(VesselManager project)
     {
         Report = new Report(project);
     }
