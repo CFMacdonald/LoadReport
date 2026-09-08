@@ -47,8 +47,8 @@ public partial class MainWindow : Window
         if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter && !project.VesselCreated)
         {
             Vessel vessel = new Vessel(jobDescription!, jobNumber!, clientName!, clientAddress!, vesselType!, numberOfBeds, initalOutage, internalDiamater);
-            project.InitialiseVessel(vessel);
-            project.DebugLayers();
+            project.InitialiseVessel(vessel);   
+            project.GenerateReport(project);
         }
     }
 

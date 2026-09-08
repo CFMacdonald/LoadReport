@@ -2,14 +2,14 @@
 
 public class Vessel
 {
-    string? JobDescription {  get; set; }
-    string? JobNumber {  get; set; }
-    string? ClientName { get; set; }
-    string? ClientAddress { get; set; }
-    string? VesselType {  get; set; }
-    int BedNumber {  get; set; }
-    int InitialOutage { get; set; }
-    int InternalDiameter {  get; set; }
+    public string? JobDescription {  get; private set; }
+    public string? JobNumber {  get; private set; }
+    public string? ClientName { get; private set; }
+    public string? ClientAddress { get; private set; }
+    public string? VesselType {  get; private set; }
+    public int BedNumber {  get; private set; }
+    public int InitialOutage { get; private set; }
+    public int InternalDiameter {  get; private set; }
    
    
     public Vessel(string jobDescription, string jobNumber, string clientName, string clientAddress, string vesselType, int bedNumber, int initialOutage, int internalDiameter)
