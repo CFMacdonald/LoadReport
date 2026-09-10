@@ -17,16 +17,17 @@ public class Report
     VesselManager _vesselManager;
     Layer[] TEMPLAYERS;
     float renderHeight = 700f;
-    float logicalScale;
+    float actualScale;
  
     public Report(VesselManager vesselManager)
     {
-        TEMPLAYERS = new Layer[4];
-        TEMPLAYERS[0] = new Layer("Support", "Ceramic Balls", 900, 790, 10, 25, "Sock Load");
-        TEMPLAYERS[1] = new Layer("Catalyst", "Ceramics", 800, 540, 20, 100, "Dense Load");
-        TEMPLAYERS[2] = new Layer("Catalyst", "Catalyst B", 200, 240, 25, 100, "Dense Load");
-        TEMPLAYERS[3] = new Layer("Top Support", "Ceramic Balls", 100, 90, 8, 25, "Sock Load");
-
+        TEMPLAYERS = new Layer[6];
+        TEMPLAYERS[0] = new Layer("Support", "Ceramic Balls 1\"", 9850, 9850, 8, 25, "Sock Load");
+        TEMPLAYERS[1] = new Layer("Support", "Ceramic Balls 1/2\"", 9700, 9700, 8, 25, "Sock Load");
+        TEMPLAYERS[2] = new Layer("Catalyst", "Catalyst A", 7200, 7200, 30, 100, "Dense Load");
+        TEMPLAYERS[3] = new Layer("Catalyst", "Catalyst B", 3200, 3200, 35, 100, "Dense Load");
+        TEMPLAYERS[4] = new Layer("Top Support", "Ceramic Balls 1/2\"", 3050, 3050, 6, 25, "Sock Load");
+        TEMPLAYERS[5] = new Layer("Top Support", "Ceramic Balls 1\"", 2900, 2900, 6, 25, "Sock Load");
 
         _vesselManager = vesselManager;
         GenerateReport();       
@@ -35,8 +36,8 @@ public class Report
 
     void GenerateReport()
     {
-        logicalScale = _vesselManager.Vessel.InitialOutage;
-        float scale = renderHeight / logicalScale;
+        actualScale = _vesselManager.Vessel.InitialOutage;
+        float scale = renderHeight / actualScale;
 
     Document.Create(container =>
         {
@@ -45,108 +46,106 @@ public class Report
             container.Page(page =>
             {
                 page.Size(PageSizes.A4);
-                page.Margin(5, Unit.Millimetre);
+                page.Margin(10, Unit.Millimetre);
                 page.PageColor(Colors.White);
                 page.DefaultTextStyle(x => x.FontSize(6));
-
-            
-
+                // Title Header
                 page.Header()
-                    
+                    .OffsetY(-10)
                     .Text("Loading Report")
+
                     .SemiBold().FontSize(36).FontColor(Colors.Black);
-
+                    
+                
+                
+                // Page
                 page.Content()
-
                 // First Row Table
-
                 .Row(row =>
                 {
-                    row.ConstantItem(140)
-                    
-
+                    row.ConstantItem(140)                    
                     .Column(column =>
                     {
-                        // Top Section of Table Left Side
-
-                        column.Item()
-                       
+                        // Left Side Table, Information
+                        column.Item()                      
                         .Table(table =>
                         {
                             table.ColumnsDefinition(columns =>
                             {
                                 columns.ConstantColumn(70);
                                 columns.ConstantColumn(70);
-
                             });
 
                             DisplayProjectInformation(table);
                             DisplayerVesselInformation(table);
                             DisplayLayers(table);
                             DisplayCompanyImage(table);
-                        });
+                        });                 
+                    });
 
-                        // Right Side of Table, Vessel Diagaram Location
+                    // Right Side of Table, Vessel Diagram
+                    float topOffset = 10f;
+                    float rightOffset = 10f;
+                    float xOffsetTextPadding = 38f;
 
-                        row.RelativeItem()
+                    row.RelativeItem()
+                        .Border(0.5F)
+                        .Height(710)
+                        .Layers(layer =>
+                        {
+                            layer.PrimaryLayer()
+                                .Width(395)
+                                .Height(renderHeight);
 
-                 
-                            .Border(.5F)
-                            .AlignMiddle()
-                            .AlignCenter()  
-                            .Width(220)
-                            
-                            .Height(renderHeight)
+                            layer.Layer()
+                                .AlignRight()
+                                .OffsetX(-rightOffset)
+                                .OffsetY(topOffset)
+                                .Height(renderHeight)
+                                .Svg("Models/VesselTemplates/SingleBedVessel.svg");
 
-                            .Layers(layer =>
+                            foreach (var outage in TEMPLAYERS.Reverse())
                             {
-                                // vessel render
-                            layer.PrimaryLayer()                            
-                                   
-                            .Svg("Models/VesselTemplates/SingleBedVessel.svg");
-
-
-                                
-                                // outage render
-                                foreach (var outage in TEMPLAYERS.Reverse())
-                                {
-                                    layer.Layer()
-                                    .OffsetY(outage.ActualOutage * scale)
-
+                                layer.Layer()
+                                    .OffsetX(-rightOffset)
+                                    .OffsetY(topOffset + (outage.ActualOutage * scale))
+                                    .AlignRight()
+                                    .Width(350)
                                     .LineHorizontal(1);
 
-                                    layer.Layer()
-                                    .OffsetY(outage.ActualOutage * scale)
-                                    .Text($"{outage.ProductName}");
-
-                                    
-                                }
-                                // Initial Outage render
                                 layer.Layer()
-                             .OffsetY(_vesselManager.Vessel.InitialOutage * scale)
-                             .LineHorizontal(1);
+                                    .OffsetX(xOffsetTextPadding)
+                                    .OffsetY(12 + (outage.ActualOutage * scale))
+                                    .Text($"{outage.ActualOutage}mm {outage.ProductName}");
+                            }
 
-                                layer.Layer()
-                                .OffsetY(_vesselManager.Vessel.InitialOutage * scale)
-                                .Text($"Inital Outage: {_vesselManager.Vessel.InitialOutage}");
-
-                                // 0 Mark render
-
-
-                                layer.Layer()
-                                .OffsetY(0)
+                            // Initial Outage
+                            layer.Layer()
+                                .OffsetX(-rightOffset)
+                                .OffsetY(topOffset + (_vesselManager.Vessel.InitialOutage * scale))
+                                .AlignRight()
+                                .Width(350)
                                 .LineHorizontal(1);
 
-                                layer.Layer()
-                                .OffsetY(0)
-                                .Text($"Base Mark: 00000");
-                            });
-                            
+                            layer.Layer()
+                                .OffsetY(12 + (_vesselManager.Vessel.InitialOutage * scale))
+                                .OffsetX(xOffsetTextPadding)
+                                .Text($"{_vesselManager.Vessel.InitialOutage}mm Intial Outage");
 
-                   
-                    });
-                });
-                page.Footer();
+                            // 0 Mark
+                            layer.Layer()
+                                .OffsetX(-rightOffset)
+                                .OffsetY(topOffset)
+                                .AlignRight()
+                                .Width(350)
+                                .LineHorizontal(1);
+
+                            layer.Layer()
+                                .OffsetX(xOffsetTextPadding)
+                                .OffsetY(2 + topOffset)
+                                .Text("00000");
+                        });
+                });               
             });
         })
 
