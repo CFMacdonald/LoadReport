@@ -110,8 +110,8 @@ public partial class MainWindow : Window
     }
     bool ValidateVesselType()
     {
-        var selectedItem = VesselTypeComboBox.SelectionBoxItem.ToString();
-        if (selectedItem == "")
+        var selectedItem = VesselTypeComboBox.SelectionBoxItem;
+        if (selectedItem == null)
         {
             VesselTypeTextBlock.Foreground = Brushes.Red;
             return false;
@@ -119,7 +119,7 @@ public partial class MainWindow : Window
         else
         {
             VesselTypeTextBlock.Foreground = Brushes.Black;
-            vesselType = selectedItem;
+            vesselType = selectedItem.ToString();
             return true;
         }
     }

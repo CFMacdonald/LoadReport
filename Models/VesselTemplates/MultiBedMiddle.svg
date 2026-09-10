@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185 410" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="5.554" y="-6.347" width="27.792" height="33.347" divisions="1"/>
+  </defs>
+  <path style="stroke: rgb(0, 0, 0); fill: none;" d="M 5 5 H 180 A 0 0 0 0 1 180 5 V 405 A 0 0 0 0 1 180 405 H 5 A 0 0 0 0 1 5 405 V 5 A 0 0 0 0 1 5 5 Z" bx:shape="rect 5 5 175 400 0 0 0 0 0 0 0 0 0 0 0 0 2@fb12059e"/>
+</svg>
