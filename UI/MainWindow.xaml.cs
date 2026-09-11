@@ -11,7 +11,7 @@ public partial class MainWindow : Window
     string? jobNumber;
     string? clientName;
     string? clientAddress;
-    string? vesselType;
+    VesselType vesselType;
     int numberOfBeds;
     int initalOutage;
     int internalDiamater;
@@ -21,6 +21,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         vesselManager = new VesselManager();
+        VesselTypeComboBox.ItemsSource = Enum.GetValues<VesselType>();
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)
@@ -110,18 +111,19 @@ public partial class MainWindow : Window
     }
     bool ValidateVesselType()
     {
-        var selectedItem = VesselTypeComboBox.SelectionBoxItem;
-        if (selectedItem == null)
+       var selectedItem = VesselTypeComboBox.SelectedItem;
+
+       if(selectedItem == null)
         {
-            VesselTypeTextBlock.Foreground = Brushes.Red;
+           VesselTypeTextBlock.Foreground = Brushes.Red;
             return false;
         }
         else
         {
             VesselTypeTextBlock.Foreground = Brushes.Black;
-            vesselType = selectedItem.ToString();
+            vesselType = (VesselType)selectedItem;
             return true;
-        }
+        }   
     }
     bool ValidateNumberOfBeds()
     {

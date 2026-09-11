@@ -54,14 +54,12 @@
         <!-- Vessel Type -->
         <StackPanel Orientation="Horizontal"  Grid.Row="6">
             <TextBlock x:Name="VesselTypeTextBlock" Text="Vessel Type:"  Margin="10,5,0,5"  Width="100" />
-            <ComboBox x:Name="VesselTypeComboBox"  Margin="10,5,0,5"  Width="300">
-                <ComboBoxItem Content="Single Bed"/>
-                <ComboBoxItem Content="Multi Bed"/>
-                <ComboBoxItem Content="Reformer Tube"/>
-                <ComboBoxItem Content="Secondary Reformer"/>
-                <ComboBoxItem Content="CCR"/>
+            <ComboBox x:Name="VesselTypeComboBox"  Margin="10,5,0,5"  Width="300" >
             </ComboBox>
         </StackPanel>
+       
+            
+       
         <!-- Bed Number -->
         <StackPanel Orientation="Horizontal"  Grid.Row="7">
             <TextBlock x:Name="BedNumberTextBlock" Text="Number of Beds:"  Margin="10,5,0,5"  Width="100" />
