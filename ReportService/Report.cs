@@ -5,6 +5,8 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
+
+
 namespace LoadReport.ReportService;
 
 public class Report
@@ -15,20 +17,11 @@ public class Report
     }
 
     VesselManager _vesselManager;
-    Layer[] TEMPLAYERS;
+   
     float renderHeight = 700f;
-    float actualScale;
-
+    
     public Report(VesselManager vesselManager)
     {
-        TEMPLAYERS = new Layer[6];
-        TEMPLAYERS[0] = new Layer("Support", "Ceramic Balls 1\"", 9850, 9850, 8, 25, "Sock Load");
-        TEMPLAYERS[1] = new Layer("Support", "Ceramic Balls 1/2\"", 9700, 9700, 8, 25, "Sock Load");
-        TEMPLAYERS[2] = new Layer("Catalyst", "Catalyst A", 7200, 7200, 30, 100, "Dense Load");
-        TEMPLAYERS[3] = new Layer("Catalyst", "Catalyst B", 3200, 3200, 35, 100, "Dense Load");
-        TEMPLAYERS[4] = new Layer("Top Support", "Ceramic Balls 1/2\"", 3050, 3050, 6, 25, "Sock Load");
-        TEMPLAYERS[5] = new Layer("Top Support", "Ceramic Balls 1\"", 2900, 2900, 6, 25, "Sock Load");
-
         _vesselManager = vesselManager;
         GenerateReport();
     }
@@ -76,14 +69,19 @@ public class Report
                             });
 
                         // Right Side of Table, Vessel Diagram
-                       
-
                         row.RelativeItem()
-                            .Border(0.5F)
-                            .Height(710)
+                            .Border(0.5F)                                   
+                            .Row(row => { 
+
+                            row.RelativeItem()
+                                .Width(370)
+                                .AlignCenter()
+                                .AlignMiddle()
+                                
                             .Layers(layer =>
                             {
                                 RenderVessel(layer);
+                            });
                             });
                     });
             });
@@ -93,67 +91,89 @@ public class Report
 
     }
 
+
+
     void RenderVessel(LayersDescriptor layer)
     {
-        float topOffset = 10f;
-        float rightOffset = 10f;
-        float xOffsetTextPadding = 38f;
-        actualScale = _vesselManager.Vessel.InitialOutage;
-        float scale = renderHeight / actualScale;
+        // IMPORTANT:
+        // All vessel SVG templates must be 220 x 700 with ViewBox="0 0 220 700"
+        // Render offsets and outage positioning depend on this fixed coordinate system
 
+        float textOffsetX = 20f;
+        float textOffsetY = 1f;
+
+        // Work out how much of the SVG is actually available
+        // for rendering outage measurements
+        float renderOffset = GetRenderOffset();
+        float usableRenderHeight = renderHeight - renderOffset;
+
+        // Physical vessel measurement represented by the usable render area
+        float vesselHeightMm = _vesselManager.Vessel.InitialOutage;
+
+        // Points per millimetre
+        float scale = usableRenderHeight / vesselHeightMm;
+
+
+        // Drawing area
         layer.PrimaryLayer()
-            .Width(395)
+            .Width(370)
             .Height(renderHeight);
 
+
+        // Vessel SVG
         layer.Layer()
             .AlignRight()
-            .OffsetX(-rightOffset)
-            .OffsetY(topOffset)
             .Height(renderHeight)
-            .Svg("Models/VesselTemplates/SingleBedVessel.svg");
+            .Svg(vesselTemplate());
 
-        foreach (var outage in TEMPLAYERS.Reverse())
+
+        // Layer outage lines and labels
+
+     
+        foreach (var outage in _vesselManager.Layers)
         {
+            float outagePosition = outage.ActualOutage * scale;
+
             layer.Layer()
-                .OffsetX(-rightOffset)
-                .OffsetY(topOffset + (outage.ActualOutage * scale))
+                .OffsetY(outagePosition)
                 .AlignRight()
                 .Width(350)
                 .LineHorizontal(1);
 
             layer.Layer()
-                .OffsetX(xOffsetTextPadding)
-                .OffsetY(12 + (outage.ActualOutage * scale))
+                .OffsetX(textOffsetX)
+                .OffsetY(textOffsetY + outagePosition)
                 .Text($"{outage.ActualOutage}mm {outage.ProductName}");
         }
 
-        // Initial Outage
+
+        // Initial outage
+        float initialOutagePosition =
+            _vesselManager.Vessel.InitialOutage * scale;
+
         layer.Layer()
-            .OffsetX(-rightOffset)
-            .OffsetY(topOffset + (_vesselManager.Vessel.InitialOutage * scale))
+            .OffsetY(initialOutagePosition)
             .AlignRight()
             .Width(350)
             .LineHorizontal(1);
 
         layer.Layer()
-            .OffsetY(12 + (_vesselManager.Vessel.InitialOutage * scale))
-            .OffsetX(xOffsetTextPadding)
-            .Text($"{_vesselManager.Vessel.InitialOutage}mm Intial Outage");
+            .OffsetX(textOffsetX)
+            .OffsetY(textOffsetY + initialOutagePosition)
+            .Text($"{_vesselManager.Vessel.InitialOutage}mm Initial Outage");
 
-        // 0 Mark
+
+        // 0 mark
         layer.Layer()
-            .OffsetX(-rightOffset)
-            .OffsetY(topOffset)
             .AlignRight()
             .Width(350)
             .LineHorizontal(1);
 
         layer.Layer()
-            .OffsetX(xOffsetTextPadding)
-            .OffsetY(2 + topOffset)
+            .OffsetX(textOffsetX)
+            .OffsetY(textOffsetY)
             .Text("00000");
     }
-
     void DisplayerVesselInformation(TableDescriptor table)
     {
         // Vessel Information Header
@@ -162,12 +182,9 @@ public class Report
             .Text("Vessel Information:");
         // Vessel ID
         table.Cell().Element(CellStyle).Text("Vessel ID:");
-        table.Cell().Element(CellStyle).Text($"{Placeholders.Integer()}");
-        // Vessel Type
-        table.Cell().Element(CellStyle).Text("Vessel Type:");
-        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel}");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.VesselID}");        
         // Bed Number
-        table.Cell().Element(CellStyle).Text("Number of Beds:");
+        table.Cell().Element(CellStyle).Text("Bed Number:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.BedNumber}");
         // Initial Outage
         table.Cell().Element(CellStyle).Text("Initial Outage:");
@@ -205,6 +222,9 @@ public class Report
         // Client Address
         table.Cell().Element(CellStyle).Text("Client Location:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.ClientAddress}");
+        // Vessel Type
+        table.Cell().Element(CellStyle).Text("Template Type:");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.TemplateType}");
 
         static IContainer CellStyle(IContainer container)
             => container.Border(0.4f, Unit.Point).Padding(1);
@@ -265,5 +285,37 @@ public class Report
             .Padding(10)
             .AlignCenter()
             .Image(Placeholders.Image(50, 25));
+    }
+
+    string vesselTemplate()
+    {
+        string template = "Models/VesselTemplates/SingleBedVessel.svg";
+
+        Template selection = _vesselManager.Vessel.TemplateType;
+
+        switch (selection)
+        {
+            case Template.SingleBed: template = "Models/VesselTemplates/SingleBedVessel.svg"; break;
+            case Template.SingleBedWithSupportGrid: template = "Models/VesselTemplates/SingleBedVesselWithTray.svg"; break;
+            case Template.SecondaryReformer: template = "Models/VesselTemplates/SecondaryReformer.svg"; break;
+            case Template.TopBed: template = "Models/VesselTemplates/MultiBedVesselTopBed.svg"; break;
+            case Template.MiddleBed: template = "Models/VesselTemplates/MultiBedVesselMiddleBed.svg"; break;
+            case Template.BottomBed: template = "Models/VesselTemplates/MultiBedVesselBottomBed.svg"; break;
+        }
+        return template;
+    }
+
+    int GetRenderOffset()
+    {      
+        int renderOffset;
+        if (_vesselManager.Vessel.TemplateType == Template.SecondaryReformer || _vesselManager.Vessel.TemplateType ==  Template.SingleBedWithSupportGrid)
+        {
+            renderOffset = 100;
+        }
+        else
+        {
+            renderOffset = 0;
+        }
+        return renderOffset;
     }
 }

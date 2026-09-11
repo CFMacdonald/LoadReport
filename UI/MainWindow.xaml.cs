@@ -11,51 +11,73 @@ public partial class MainWindow : Window
     string? jobNumber;
     string? clientName;
     string? clientAddress;
-    VesselType vesselType;
-    int numberOfBeds;
+    string? vesselID;
+    Template templateType;
+    int bedNumber;
     int initalOutage;
     int internalDiamater;
     VesselManager vesselManager;
+    bool hasSupportGrid;
 
     public MainWindow()
     {
         InitializeComponent();
         vesselManager = new VesselManager();
-        VesselTypeComboBox.ItemsSource = Enum.GetValues<VesselType>();
+        VesselTypeComboBox.ItemsSource = Enum.GetValues<Template>();
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)
-    {      
+    {
         NewLayerWindow newLayerWindow = new NewLayerWindow();
         newLayerWindow.Show();
         newLayerWindow.GetVesselManager(vesselManager);
         newLayerWindow.GetMainWindow(this);
         ButtonRemoveLayer.BorderBrush = Brushes.Black;
-
     }
 
     private void Generate_Button_Click(object sender, RoutedEventArgs e)
     {
+        AssignTextBox();
+
         bool checkJobDes = ValidateJobDescription();
         bool checkJobNumber = ValidateJobNumber();
         bool checkClientName = ValidateClientName();
         bool checkClientAddress = ValidateClientAddress();
-        bool checkVesselType = ValidateVesselType();
+        bool checkVesselID = ValidateVesselID();
+        bool checkTemplateType = ValidateTemplateType();
         bool checkBedNumber = ValidateNumberOfBeds();
         bool checkOutage = ValidateInitalOutage();
         bool checkInternalDiameter = ValidateInternalDiameter();
-
-        if (checkJobDes && checkJobNumber && checkClientName && checkClientAddress && checkVesselType && checkBedNumber && checkOutage && checkInternalDiameter && !vesselManager.VesselCreated)
+       
+      
+        if (checkJobDes && 
+            checkJobNumber && 
+            checkClientName && 
+            checkClientAddress && 
+            checkVesselID &&
+            checkTemplateType && 
+            checkBedNumber && 
+            checkOutage && 
+            checkInternalDiameter &&             
+            !vesselManager.VesselCreated)
         {
-            Vessel vessel = new Vessel(jobDescription!, jobNumber!, clientName!, clientAddress!, vesselType!, numberOfBeds, initalOutage, internalDiamater);
-            vesselManager.InitialiseVessel(vessel);   
+            Vessel vessel = new Vessel(jobDescription!, 
+                jobNumber!, 
+                clientName!, 
+                clientAddress!, 
+                vesselID!,
+                templateType!, 
+                bedNumber, 
+                initalOutage,
+                internalDiamater);
+
+            vesselManager.InitialiseVessel(vessel);
             vesselManager.GenerateReport(vesselManager);
         }
     }
-
+   
     bool ValidateJobDescription()
-    {
-        jobDescription = JobDescriptionTextBox.Text;
+    {    
         if (jobDescription == "")
         {
             JobDescriptionTextBlock.Foreground = Brushes.Red;
@@ -67,9 +89,9 @@ public partial class MainWindow : Window
             return true;
         }
     }
+
     bool ValidateJobNumber()
-    {
-        jobNumber = JobNumberTextBox.Text;
+    {       
         if (jobNumber == "")
         {
             JobNumberTextBlock.Foreground = Brushes.Red;
@@ -81,9 +103,9 @@ public partial class MainWindow : Window
             return true;
         }
     }
+
     bool ValidateClientName()
-    {
-        clientName = ClientNameTextBox.Text;
+    {       
         if (clientName == "")
         {
             ClientNameTextBlock.Foreground = Brushes.Red;
@@ -95,9 +117,9 @@ public partial class MainWindow : Window
             return true;
         }
     }
+
     bool ValidateClientAddress()
-    {
-        clientAddress = ClientAddressTextBox.Text;
+    {     
         if (clientAddress == "")
         {
             ClientAddressTextBlock.Foreground = Brushes.Red;
@@ -109,27 +131,43 @@ public partial class MainWindow : Window
             return true;
         }
     }
-    bool ValidateVesselType()
-    {
-       var selectedItem = VesselTypeComboBox.SelectedItem;
 
-       if(selectedItem == null)
+    bool ValidateVesselID()
+    {
+        if (vesselID == "")
         {
-           VesselTypeTextBlock.Foreground = Brushes.Red;
+            VesselIDTextBlock.Foreground = Brushes.Red;
+            return false;
+        }
+        else
+        {
+            VesselIDTextBlock.Foreground = Brushes.Black;
+            return true;
+        }
+    }
+
+    bool ValidateTemplateType()
+    {
+        var selectedItem = VesselTypeComboBox.SelectedItem;
+
+        if (selectedItem == null)
+        {
+            VesselTypeTextBlock.Foreground = Brushes.Red;
             return false;
         }
         else
         {
             VesselTypeTextBlock.Foreground = Brushes.Black;
-            vesselType = (VesselType)selectedItem;
+            templateType = (Template)selectedItem;
             return true;
-        }   
+        }
     }
+
     bool ValidateNumberOfBeds()
     {
         var selectedItem = BedNumberComboBox.SelectionBoxItem;
 
-        bool pass = Int32.TryParse(selectedItem.ToString(), out numberOfBeds);
+        bool pass = Int32.TryParse(selectedItem.ToString(), out bedNumber);
         if (pass)
         {
             BedNumberTextBlock.Foreground = Brushes.Black;
@@ -142,6 +180,7 @@ public partial class MainWindow : Window
         }
 
     }
+
     bool ValidateInitalOutage()
     {
         bool pass = Int32.TryParse(InitialOutageTextBox.Text, out initalOutage);
@@ -157,6 +196,7 @@ public partial class MainWindow : Window
         }
 
     }
+
     bool ValidateInternalDiameter()
     {
         bool pass = Int32.TryParse(InternalDiameterTextBox.Text, out internalDiamater);
@@ -171,7 +211,11 @@ public partial class MainWindow : Window
             return false;
         }
     }
+
+    
    
+    
+
     public void RefreshDisplay()
     {
         int lastEntry = vesselManager.Layers.Count - 1;
@@ -181,8 +225,8 @@ public partial class MainWindow : Window
         LayerListBox.Items.Add($"Layer: {lastEntry + 1} {layer.LayerType} {layer.ProductName} Outage: {layer.ActualOutage}mm ");
     }
 
-    private void RemoveLayer_Click(object sender, RoutedEventArgs e)
-    {    
+    void RemoveLayer_Click(object sender, RoutedEventArgs e)
+    {
         int lastEntry = vesselManager.Layers.Count - 1;
         if (lastEntry >= 0)
         {
@@ -195,7 +239,24 @@ public partial class MainWindow : Window
             ButtonRemoveLayer.BorderBrush = Brushes.Red;
         }
     }
+
+    void HasSupportGridYesRadioButton_Checked(object sender, RoutedEventArgs e)
+    {
+        hasSupportGrid = true;
+    }
+
+    void HasSupportGridNoRadioButton_Checked(object sender, RoutedEventArgs e)
+    {
+        hasSupportGrid= false;
+    }
+
+    void AssignTextBox() 
+    {
+        jobDescription = JobDescriptionTextBox.Text;
+        jobNumber = JobNumberTextBox.Text;
+        clientName = ClientNameTextBox.Text;
+        clientAddress = ClientAddressTextBox.Text;
+        vesselID = VesselIDTextBox.Text;
+    }
 }
-
-
 
