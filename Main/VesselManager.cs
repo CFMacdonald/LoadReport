@@ -10,6 +10,7 @@ public class VesselManager
     public List<Layer> Layers { get; private set; }
     public bool VesselCreated {  get; private set; }
     public float CurrentOutage { get; private set; }
+    public string CompanyLogo { get; set; }
 
     public VesselManager()
     {
@@ -19,13 +20,13 @@ public class VesselManager
 
     public void InitialiseVessel(Vessel vessel)
     {
-        Vessel = vessel;
-        VesselCreated = true;
+       Vessel = vessel;
+       VesselCreated = true;
        CurrentOutage = Vessel.InitialOutage;
     }
-    public void GenerateReport(VesselManager project)
+    public void GenerateReport(VesselManager vesselManager, string fileName)
     {
-        Report = new Report(project);
+        Report = new Report(vesselManager, fileName);
     }
 
     public void AddLayer(Layer layer)
@@ -38,7 +39,7 @@ public class VesselManager
         Layers.RemoveAt(Layers.Count - 1);
     }
 
-   public double CalculateLayerHeight(Layer layer)
+    public double CalculateLayerHeight(Layer layer)
    {       
         double layerHeight = CurrentOutage - layer.ActualOutage;
         CurrentOutage = layer.ActualOutage;

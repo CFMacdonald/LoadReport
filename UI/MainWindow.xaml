@@ -57,17 +57,23 @@
         <TextBlock x:Name="ClientAddressTextBlock" Text="Client Address:" Margin="10,5,0,5"  Width="100" />
         <TextBox x:Name="ClientAddressTextBox" Margin="10,5,0,5"  Width="300"/>
         </StackPanel>
+        <!-- Company Logo -->
+        <StackPanel Orientation="Horizontal" Grid.Row="6">
+            <TextBlock x:Name="AddCompanyLogoTextBlock" Text="Company Logo:" Margin="10,5,0,5"  Width="100"/>
+            <Button Content=" Add Logo " Margin="10,5,0,5" Click="AddCompanyLogoClick"/>
+
+        </StackPanel>
         <!-- Sub Title Vessel Information -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="6">
-            <TextBlock Text="Vessel Information" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="6"/>
+        <StackPanel Orientation="Horizontal"  Grid.Row="7">
+            <TextBlock Text="Vessel Information" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="7"/>
         </StackPanel>
         <!-- Vessel ID -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="7">
+        <StackPanel Orientation="Horizontal"  Grid.Row="8">
             <TextBlock x:Name="VesselIDTextBlock" Text="Vessel ID:"  Margin="10,5,0,5"  Width="100" />
             <TextBox x:Name="VesselIDTextBox" Margin="10,5,0,5"   Width="300"/>
         </StackPanel>
         <!-- Vessel Type -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="8">
+        <StackPanel Orientation="Horizontal"  Grid.Row="9">
             <TextBlock x:Name="VesselTypeTextBlock" Text="Vessel Template:"  Margin="10,5,0,5"  Width="100" />
             <ComboBox x:Name="VesselTypeComboBox"  Margin="10,5,0,5"  Width="300" >
             </ComboBox>

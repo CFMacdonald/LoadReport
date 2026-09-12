@@ -1,5 +1,6 @@
 ﻿using LoadReport.Main;
 using LoadReport.Models;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Media;
 
@@ -16,13 +17,13 @@ public partial class MainWindow : Window
     int bedNumber;
     int initalOutage;
     int internalDiamater;
-    VesselManager vesselManager;
-    bool hasSupportGrid;
+    VesselManager _vesselManager;
+   
 
     public MainWindow()
     {
         InitializeComponent();
-        vesselManager = new VesselManager();
+        _vesselManager = new VesselManager();
         VesselTypeComboBox.ItemsSource = Enum.GetValues<Template>();
     }
 
@@ -30,7 +31,7 @@ public partial class MainWindow : Window
     {
         NewLayerWindow newLayerWindow = new NewLayerWindow();
         newLayerWindow.Show();
-        newLayerWindow.GetVesselManager(vesselManager);
+        newLayerWindow.GetVesselManager(_vesselManager);
         newLayerWindow.GetMainWindow(this);
         ButtonRemoveLayer.BorderBrush = Brushes.Black;
     }
@@ -59,23 +60,35 @@ public partial class MainWindow : Window
             checkBedNumber && 
             checkOutage && 
             checkInternalDiameter &&             
-            !vesselManager.VesselCreated)
+            !_vesselManager.VesselCreated)
         {
-            Vessel vessel = new Vessel(jobDescription!, 
-                jobNumber!, 
-                clientName!, 
-                clientAddress!, 
+            Vessel vessel = new Vessel(jobDescription!,
+                jobNumber!,
+                clientName!,
+                clientAddress!,
                 vesselID!,
-                templateType!, 
-                bedNumber, 
+                templateType!,
+                bedNumber,
                 initalOutage,
                 internalDiamater);
 
-            vesselManager.InitialiseVessel(vessel);
-            vesselManager.GenerateReport(vesselManager);
+            string fileName = SaveFileDialog();
+            _vesselManager.InitialiseVessel(vessel);
+            _vesselManager.GenerateReport(_vesselManager, fileName);
+            Close();
         }
     }
-   
+
+    private static string SaveFileDialog()
+    {
+        SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+        saveFileDialog1.Filter = "PDF|*.pdf";
+        saveFileDialog1.Title = "Save Report";
+        saveFileDialog1.ShowDialog();
+        string fileName = saveFileDialog1.FileName;
+        return fileName;
+    }
+
     bool ValidateJobDescription()
     {    
         if (jobDescription == "")
@@ -210,44 +223,30 @@ public partial class MainWindow : Window
             InternalDiameterTextBlock.Foreground = Brushes.Red;
             return false;
         }
-    }
-
-    
-   
-    
+    }    
 
     public void RefreshDisplay()
     {
-        int lastEntry = vesselManager.Layers.Count - 1;
+        int lastEntry = _vesselManager.Layers.Count - 1;
 
-        Layer layer = vesselManager.Layers[lastEntry];
+        Layer layer = _vesselManager.Layers[lastEntry];
 
         LayerListBox.Items.Add($"Layer: {lastEntry + 1} {layer.LayerType} {layer.ProductName} Outage: {layer.ActualOutage}mm ");
     }
 
     void RemoveLayer_Click(object sender, RoutedEventArgs e)
     {
-        int lastEntry = vesselManager.Layers.Count - 1;
+        int lastEntry = _vesselManager.Layers.Count - 1;
         if (lastEntry >= 0)
         {
             LayerListBox.Items.RemoveAt(lastEntry);
-            vesselManager.RemoveLayer();
+            _vesselManager.RemoveLayer();
             lastEntry--;
         }
         else
         {
             ButtonRemoveLayer.BorderBrush = Brushes.Red;
         }
-    }
-
-    void HasSupportGridYesRadioButton_Checked(object sender, RoutedEventArgs e)
-    {
-        hasSupportGrid = true;
-    }
-
-    void HasSupportGridNoRadioButton_Checked(object sender, RoutedEventArgs e)
-    {
-        hasSupportGrid= false;
     }
 
     void AssignTextBox() 
@@ -257,6 +256,15 @@ public partial class MainWindow : Window
         clientName = ClientNameTextBox.Text;
         clientAddress = ClientAddressTextBox.Text;
         vesselID = VesselIDTextBox.Text;
+    }
+
+    private void AddCompanyLogoClick(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+
+        openFileDialog.ShowDialog();
+
+        _vesselManager.CompanyLogo = openFileDialog.FileName;
     }
 }
 

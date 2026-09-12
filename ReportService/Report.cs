@@ -4,7 +4,7 @@ using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-
+using System.IO;
 
 
 namespace LoadReport.ReportService;
@@ -16,13 +16,16 @@ public class Report
         QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
     }
 
-    VesselManager _vesselManager;
+    VesselManager _vesselManager;  
+    float RenderHeight = 700f;
+    string FileName {  get; set; }
    
-    float renderHeight = 700f;
     
-    public Report(VesselManager vesselManager)
+    public Report(VesselManager vesselManager, string fileName)
     {
         _vesselManager = vesselManager;
+        FileName = fileName;
+        
         GenerateReport();
     }
 
@@ -40,7 +43,7 @@ public class Report
                 // Title Header
                 page.Header()
                     .OffsetY(-10)
-                    .Text("Loading Report")
+                    .Text($"Loading Report - {_vesselManager.Vessel.VesselID}")
                     .SemiBold().FontSize(36).FontColor(Colors.Black);
 
                 // Page
@@ -70,24 +73,25 @@ public class Report
 
                         // Right Side of Table, Vessel Diagram
                         row.RelativeItem()
-                            .Border(0.5F)                                   
-                            .Row(row => { 
-
-                            row.RelativeItem()
-                                .Width(370)
-                                .AlignCenter()
-                                .AlignMiddle()
-                                
-                            .Layers(layer =>
+                            .Border(0.5F)
+                            .Row(row =>
                             {
-                                RenderVessel(layer);
-                            });
+
+                                row.RelativeItem()
+                                    .Width(370)
+                                    .AlignCenter()
+                                    .AlignMiddle()
+
+                                .Layers(layer =>
+                                {
+                                    RenderVessel(layer);
+                                });
                             });
                     });
             });
         })
 
-        .ShowInCompanion();
+        .GeneratePdf($"{FileName}");
 
     }
 
@@ -105,7 +109,7 @@ public class Report
         // Work out how much of the SVG is actually available
         // for rendering outage measurements
         float renderOffset = GetRenderOffset();
-        float usableRenderHeight = renderHeight - renderOffset;
+        float usableRenderHeight = RenderHeight - renderOffset;
 
         // Physical vessel measurement represented by the usable render area
         float vesselHeightMm = _vesselManager.Vessel.InitialOutage;
@@ -117,14 +121,14 @@ public class Report
         // Drawing area
         layer.PrimaryLayer()
             .Width(370)
-            .Height(renderHeight);
+            .Height(RenderHeight);
 
 
         // Vessel SVG
         layer.Layer()
             .AlignRight()
-            .Height(renderHeight)
-            .Svg(vesselTemplate());
+            .Height(RenderHeight)
+            .Svg(VesselTemplate());
 
 
         // Layer outage lines and labels
@@ -222,10 +226,7 @@ public class Report
         // Client Address
         table.Cell().Element(CellStyle).Text("Client Location:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.ClientAddress}");
-        // Vessel Type
-        table.Cell().Element(CellStyle).Text("Template Type:");
-        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.TemplateType}");
-
+        
         static IContainer CellStyle(IContainer container)
             => container.Border(0.4f, Unit.Point).Padding(1);
     }
@@ -284,10 +285,10 @@ public class Report
             .Border(0.4f, Unit.Point)
             .Padding(10)
             .AlignCenter()
-            .Image(Placeholders.Image(50, 25));
+            .Image(CompanyLogo());
     }
 
-    string vesselTemplate()
+    string VesselTemplate()
     {
         string template = "Models/VesselTemplates/SingleBedVessel.svg";
 
@@ -318,4 +319,24 @@ public class Report
         }
         return renderOffset;
     }
+
+    string CompanyLogo()
+    {
+        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+        string relevantDir = "ReportService\\Images\\NoUpload.png";
+
+        string filePath = Path.Combine(baseDir, relevantDir);
+
+       if (_vesselManager.CompanyLogo == null || _vesselManager.CompanyLogo == "") 
+        {
+           return  filePath;
+        }
+       else
+        {
+            return _vesselManager.CompanyLogo;
+        }
+        
+    }
+   
 }
