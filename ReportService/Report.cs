@@ -19,12 +19,14 @@ public class Report
     VesselManager _vesselManager;  
     float RenderHeight = 700f;
     string FileName {  get; set; }
+    int _layerNum;
    
     
     public Report(VesselManager vesselManager, string fileName)
     {
         _vesselManager = vesselManager;
         FileName = fileName;
+        _layerNum = 1;
         
         GenerateReport();
     }
@@ -38,11 +40,11 @@ public class Report
                 page.Size(PageSizes.A4);
                 page.Margin(10, Unit.Millimetre);
                 page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(6));
+                page.DefaultTextStyle(x => x.FontSize(6).FontFamily("Inter"));
 
                 // Title Header
                 page.Header()
-                    .OffsetY(-10)
+                    .OffsetY(-5)
                     .Text($"Loading Report - {_vesselManager.Vessel.VesselID}")
                     .SemiBold().FontSize(36).FontColor(Colors.Black);
 
@@ -74,13 +76,16 @@ public class Report
                         // Right Side of Table, Vessel Diagram
                         row.RelativeItem()
                             .Border(0.5F)
+                            
                             .Row(row =>
                             {
-
+                                                       
                                 row.RelativeItem()
+                                
                                     .Width(370)
                                     .AlignCenter()
                                     .AlignMiddle()
+                                    
 
                                 .Layers(layer =>
                                 {
@@ -90,8 +95,9 @@ public class Report
                     });
             });
         })
+           .ShowInCompanion();
 
-        .GeneratePdf($"{FileName}");
+        //.GeneratePdf($"{FileName}");
 
     }
 
@@ -103,8 +109,11 @@ public class Report
         // All vessel SVG templates must be 220 x 700 with ViewBox="0 0 220 700"
         // Render offsets and outage positioning depend on this fixed coordinate system
 
-        float textOffsetX = 20f;
-        float textOffsetY = 1f;
+        float textOffsetX = 45f;
+        float textOffsetY = -5.5f;
+        float layerLineWeight = 1f;
+        const float textFontSize = 5f;
+        float layerLineWidth = 325;
 
         // Work out how much of the SVG is actually available
         // for rendering outage measurements
@@ -137,17 +146,19 @@ public class Report
         foreach (var outage in _vesselManager.Layers)
         {
             float outagePosition = outage.ActualOutage * scale;
+             
 
             layer.Layer()
                 .OffsetY(outagePosition)
                 .AlignRight()
-                .Width(350)
-                .LineHorizontal(1);
+                .Width(layerLineWidth)
+                .LineHorizontal(layerLineWeight);
 
             layer.Layer()
                 .OffsetX(textOffsetX)
                 .OffsetY(textOffsetY + outagePosition)
-                .Text($"{outage.ActualOutage}mm {outage.ProductName}");
+                .Text($"{outage.ActualOutage}mm {outage.ProductName}").FontSize(textFontSize);
+           
         }
 
 
@@ -158,32 +169,42 @@ public class Report
         layer.Layer()
             .OffsetY(initialOutagePosition)
             .AlignRight()
-            .Width(350)
-            .LineHorizontal(1);
+            .Width(layerLineWidth)
+            .LineHorizontal(layerLineWeight);
 
         layer.Layer()
             .OffsetX(textOffsetX)
             .OffsetY(textOffsetY + initialOutagePosition)
-            .Text($"{_vesselManager.Vessel.InitialOutage}mm Initial Outage");
+            .Text($"{_vesselManager.Vessel.InitialOutage}mm Initial Outage").FontSize(textFontSize);
+
 
 
         // 0 mark
         layer.Layer()
             .AlignRight()
-            .Width(350)
-            .LineHorizontal(1);
+            .Width(layerLineWidth)
+            .LineHorizontal(layerLineWeight);
 
         layer.Layer()
             .OffsetX(textOffsetX)
             .OffsetY(textOffsetY)
-            .Text("00000");
+            .Text("Datum: 00000").FontSize(textFontSize);
+
+        // Disclaimer
+        layer.Layer()
+            .AlignCenter()
+            .AlignBottom()
+            .OffsetY(20)
+            .OffsetX(15)
+            .Text("Schematic only — layer profiles may not reflect actual vessel geometry at heads or tangent lines").Italic().FontColor(Colors.Grey.Darken2);
     }
+
     void DisplayerVesselInformation(TableDescriptor table)
     {
         // Vessel Information Header
         table.Cell().ColumnSpan(2)
             .Background(Colors.Grey.Lighten2).Element(CellStyle)
-            .Text("Vessel Information:");
+            .Text("Vessel Information:").Bold();
         // Vessel ID
         table.Cell().Element(CellStyle).Text("Vessel ID:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.VesselID}");        
@@ -199,10 +220,16 @@ public class Report
         // Load Information
         table.Cell().ColumnSpan(2)
             .Background(Colors.Grey.Lighten2).Element(CellStyle)
-            .Text("Load Information:");
+            .Text("Load Information:").Bold();
         // Number of Layers
-        table.Cell().Element(CellStyle).Text("Total Number of Layers:");
+        table.Cell().Element(CellStyle).Text("Number of Layers:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Layers.Count}");
+        // Final Outage
+        table.Cell().Element(CellStyle).Text("Final Outage:");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.GetFinalOutage()}mm");
+        // Bed Densety
+        table.Cell().Element(CellStyle).Text("Catalyst/Media Bed Density:");
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateBedDensity():F2}kg/m3");
 
         static IContainer CellStyle(IContainer container)
             => container.Border(0.4f, Unit.Point).Padding(1);
@@ -213,7 +240,7 @@ public class Report
         // Table header
         table.Cell().ColumnSpan(2)
             .Background(Colors.Grey.Lighten2).Element(CellStyle)
-            .Text("Project Information:");
+            .Text("Project Information:").Bold();
         // Job Description
         table.Cell().Element(CellStyle).Text("Job Description:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.JobDescription}");
@@ -233,12 +260,12 @@ public class Report
 
     void DisplayLayers(TableDescriptor table)
     {
-        int layerNum = 1;
+        
         foreach (var layer in _vesselManager.Layers)
         {
             // Layer Number
             table.Cell().ColumnSpan(2)
-                .Background(Colors.Grey.Lighten2).Element(CellStyle).Text($"Layer: {layerNum} ");
+                .Background(Colors.Grey.Lighten2).Element(CellStyle).Text($"Layer: {_layerNum} ").Bold();
 
             // Layer Type:
             table.Cell().Element(CellStyle).Text("Layer Type:");
@@ -253,12 +280,16 @@ public class Report
             table.Cell().Element(CellStyle).Text($"{layer.LoadMethod}");
 
             // Layer Target Outage
-            table.Cell().Background(Colors.Amber.Accent1).Element(CellStyle).Text("Target Outage:");
+            table.Cell().Element(CellStyle).Text("Target Outage:");
             table.Cell().Element(CellStyle).Text($"{layer.TargetOutage} mm");
 
             // Layer Actual Outage
             table.Cell().Element(CellStyle).Text("Actual Outage:");
             table.Cell().Element(CellStyle).Text($"{layer.ActualOutage} mm");
+
+            // Layer Outage Difference 
+            table.Cell().Element(CellStyle).Text("Outage Difference:");
+            table.Cell().Background(Colors.BlueGrey.Lighten5).Element(CellStyle).Text($"{PlusOrMinusSymbol(layer)}{_vesselManager.CalculateOutageDiffereance(layer)} mm");
 
             // Layer Drum Number
             table.Cell().Element(CellStyle).Text("Total Drums:");
@@ -268,6 +299,10 @@ public class Report
             table.Cell().Element(CellStyle).Text("Drum Net Weight:");
             table.Cell().Element(CellStyle).Text($"{layer.DrumNetWeight} kg");
 
+            // Layer Loaded Mass
+            table.Cell().Element(CellStyle).Text("Total Layer Mass:");
+            table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerMass(layer)} kg");
+
             // Layer Density
             table.Cell().Element(CellStyle).Text("Layer Density");
             table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerDensity(layer):F2} kg/m3");
@@ -275,7 +310,7 @@ public class Report
             static IContainer CellStyle(IContainer container)
                 => container.Border(0.4f, Unit.Point).Padding(1);
 
-            layerNum++;
+            _layerNum++;
         }
     }
 
@@ -285,7 +320,7 @@ public class Report
             .Border(0.4f, Unit.Point)
             .Padding(10)
             .AlignCenter()
-            .Image(CompanyLogo());
+            .Image(SetCompanyLogo());
     }
 
     string VesselTemplate()
@@ -320,7 +355,7 @@ public class Report
         return renderOffset;
     }
 
-    string CompanyLogo()
+    string SetCompanyLogo()
     {
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -339,4 +374,12 @@ public class Report
         
     }
    
+    string PlusOrMinusSymbol(Layer layer)
+    {
+        float value = layer.TargetOutage - layer.ActualOutage;
+        int sign = Math.Sign(value);
+
+        if (sign > 0) return "+";
+        else return "";  
+    }
 }

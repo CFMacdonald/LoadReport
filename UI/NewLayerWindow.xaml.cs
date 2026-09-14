@@ -10,7 +10,7 @@ namespace LoadReport;
 public partial class NewLayerWindow : Window
 {
 
-    string? layerType;
+    LayerType layerType;
     string productName;
     int actualOutage;
     int targetOutage;
@@ -25,6 +25,7 @@ public partial class NewLayerWindow : Window
     public NewLayerWindow()
     {
         InitializeComponent();
+        LayerTypeComboBox.ItemsSource = Enum.GetValues<LayerType>();
     }
 
     private void AddLayerConfirm_Click(object sender, RoutedEventArgs e)
@@ -56,7 +57,7 @@ public partial class NewLayerWindow : Window
         else
         {
             LayerTypeTextBlock.Foreground = Brushes.Black;
-            layerType = selectedItem.ToString();
+            layerType = (LayerType)selectedItem;
             return true;
         }
         }

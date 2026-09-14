@@ -2,7 +2,7 @@
 
 public class Layer
 {
-    public string? LayerType {  get; private set; }
+    public LayerType LayerType {  get; private set; }
     public string? ProductName {  get; private set; }
     public int ActualOutage { get; private set; }
     public int TargetOutage { get; private set; }
@@ -13,7 +13,7 @@ public class Layer
 
     public double LayerHeight {  get; set; }
 
-    public Layer(string layerType, string productName, int actualOutage, int targetOutage, double drumQuanity, double drumNetWeight, string loadMethod)
+    public Layer(LayerType layerType, string productName, int actualOutage, int targetOutage, double drumQuanity, double drumNetWeight, string loadMethod)
     {
         LayerType = layerType;
         ProductName = productName;
@@ -23,7 +23,6 @@ public class Layer
         DrumNetWeight = drumNetWeight;
         LoadMethod = loadMethod;
     }
-
-
     
 }
+public enum LayerType {Catalyst, Media, Support, Tray}

@@ -11,6 +11,7 @@ public class VesselManager
     public bool VesselCreated {  get; private set; }
     public float CurrentOutage { get; private set; }
     public string CompanyLogo { get; set; }
+    public float FinalOutage { get; private set; }
 
     public VesselManager()
     {
@@ -53,16 +54,52 @@ public class VesselManager
         double volume = area * CalculateLayerHeight(layer);
         return volume;
     }
-    double CalculateLayerMass(Layer layer)
+
+    public double CalculateLayerMass(Layer layer) => layer.DrumNetWeight * layer.DrumQuanity;
+   
+    public double CalculateLayerDensity(Layer layer) => CalculateLayerMass(layer) / CalculateLayerVolume(layer);
+
+    public int CalculateOutageDiffereance(Layer layer) => layer.TargetOutage - layer.ActualOutage;
+
+    public int GetTotalLayerAmount() => Layers.Count;
+
+    public float GetFinalOutage() 
     {
-        double mass = layer.DrumNetWeight * layer.DrumQuanity;
-        return mass;
+        if(Layers.Count <= 0) 
+        {  
+            return Vessel.InitialOutage;
+        }
+        else
+        {
+            int finalIndex = Layers.Count - 1;
+
+            float outage = Layers[finalIndex].ActualOutage;
+            return outage;
+
+        }
+
+
+       
     }
-    public double CalculateLayerDensity(Layer layer)
+
+    public double CalculateBedDensity()
     {
-        double density = CalculateLayerMass(layer) / CalculateLayerVolume(layer);
-        return density;
+        double totalMass = 0;
+        double totalVolume = 0;
+
+        foreach (Layer layer in Layers)
+        {
+            if (layer.LayerType == LayerType.Catalyst || layer.LayerType == LayerType.Media)
+            {
+                totalMass += CalculateLayerMass(layer);
+                totalVolume += CalculateLayerVolume(layer);
+            }
+        }
+        CurrentOutage = Vessel.InitialOutage;
+
+        return totalMass / totalVolume;
     }
+      
 }
 
 

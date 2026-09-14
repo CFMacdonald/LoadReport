@@ -25,6 +25,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         _vesselManager = new VesselManager();
         VesselTypeComboBox.ItemsSource = Enum.GetValues<Template>();
+
     }
 
     private void LayerButton_Click(object sender, RoutedEventArgs e)

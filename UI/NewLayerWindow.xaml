@@ -31,10 +31,6 @@
         <StackPanel Orientation="Horizontal"  Grid.Row="2">
             <TextBlock x:Name="LayerTypeTextBlock" Text="Layer Type:"  Margin="10,5,0,5"  Width="100" />
             <ComboBox x:Name="LayerTypeComboBox"  Margin="10,5,0,5"  Width="300">
-                <ComboBoxItem Content="Catalyst"/>
-                <ComboBoxItem Content="Media"/>
-                <ComboBoxItem Content="Support"/>
-                <ComboBoxItem Content="Tray"/>
             </ComboBox>
         </StackPanel>
         <!-- Product Name -->
