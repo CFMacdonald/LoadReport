@@ -6,7 +6,6 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.IO;
 
-
 namespace LoadReport.ReportService;
 
 public class Report
@@ -16,18 +15,17 @@ public class Report
         QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
     }
 
-    VesselManager _vesselManager;  
+    VesselManager _vesselManager;
     float RenderHeight = 700f;
-    string FileName {  get; set; }
+    string FileName { get; set; }
     int _layerNum;
-   
-    
+
     public Report(VesselManager vesselManager, string fileName)
     {
         _vesselManager = vesselManager;
         FileName = fileName;
         _layerNum = 1;
-        
+
         GenerateReport();
     }
 
@@ -38,15 +36,30 @@ public class Report
             container.Page(page =>
             {
                 page.Size(PageSizes.A4);
-                page.Margin(10, Unit.Millimetre);
+                page.Margin(8, Unit.Millimetre);
                 page.PageColor(Colors.White);
                 page.DefaultTextStyle(x => x.FontSize(6).FontFamily("Inter"));
 
                 // Title Header
                 page.Header()
-                    .OffsetY(-5)
-                    .Text($"Loading Report - {_vesselManager.Vessel.VesselID}")
-                    .SemiBold().FontSize(36).FontColor(Colors.Black);
+                    .Row(row =>
+                {
+                        row.RelativeItem()
+                            .Height(40)
+                            .Layers(layer =>
+                            {
+                                layer.Layer()
+                                    .AlignRight()
+                                    .AlignTop()
+                                    .Image(SetCompanyLogo())
+                                    .FitHeight();
+
+                                layer.PrimaryLayer()
+                                    .OffsetY(0)
+                                    .Text($"Loading Report {_vesselManager.Vessel.VesselID}")
+                                    .SemiBold().FontSize(30).FontColor(Colors.Black);
+                            });
+                    });
 
                 // Page
                 page.Content()
@@ -69,39 +82,30 @@ public class Report
                                         DisplayProjectInformation(table);
                                         DisplayerVesselInformation(table);
                                         DisplayLayers(table);
-                                        DisplayCompanyImage(table);
                                     });
                             });
 
                         // Right Side of Table, Vessel Diagram
                         row.RelativeItem()
                             .Border(0.5F)
-                            
                             .Row(row =>
                             {
-                                                       
                                 row.RelativeItem()
-                                
                                     .Width(370)
                                     .AlignCenter()
                                     .AlignMiddle()
-                                    
-
-                                .Layers(layer =>
-                                {
-                                    RenderVessel(layer);
-                                });
+                                    .Layers(layer =>
+                                    {
+                                        RenderVessel(layer);
+                                    });
                             });
                     });
             });
         })
-           .ShowInCompanion();
 
+        .ShowInCompanion();
         //.GeneratePdf($"{FileName}");
-
     }
-
-
 
     void RenderVessel(LayersDescriptor layer)
     {
@@ -126,12 +130,10 @@ public class Report
         // Points per millimetre
         float scale = usableRenderHeight / vesselHeightMm;
 
-
         // Drawing area
         layer.PrimaryLayer()
             .Width(370)
             .Height(RenderHeight);
-
 
         // Vessel SVG
         layer.Layer()
@@ -141,12 +143,9 @@ public class Report
 
 
         // Layer outage lines and labels
-
-     
         foreach (var outage in _vesselManager.Layers)
         {
             float outagePosition = outage.ActualOutage * scale;
-             
 
             layer.Layer()
                 .OffsetY(outagePosition)
@@ -207,7 +206,8 @@ public class Report
             .Text("Vessel Information:").Bold();
         // Vessel ID
         table.Cell().Element(CellStyle).Text("Vessel ID:");
-        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.VesselID}");        
+        table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.VesselID}");
+
         // Bed Number
         table.Cell().Element(CellStyle).Text("Bed Number:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.BedNumber}");
@@ -253,14 +253,13 @@ public class Report
         // Client Address
         table.Cell().Element(CellStyle).Text("Client Location:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.Vessel.ClientAddress}");
-        
+
         static IContainer CellStyle(IContainer container)
             => container.Border(0.4f, Unit.Point).Padding(1);
     }
 
     void DisplayLayers(TableDescriptor table)
     {
-        
         foreach (var layer in _vesselManager.Layers)
         {
             // Layer Number
@@ -288,8 +287,8 @@ public class Report
             table.Cell().Element(CellStyle).Text($"{layer.ActualOutage} mm");
 
             // Layer Outage Difference 
-            table.Cell().Element(CellStyle).Text("Outage Difference:");
-            table.Cell().Background(Colors.BlueGrey.Lighten5).Element(CellStyle).Text($"{PlusOrMinusSymbol(layer)}{_vesselManager.CalculateOutageDiffereance(layer)} mm");
+            table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text("Outage Difference:");
+            table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text($"{PlusOrMinusSymbol(layer)}{_vesselManager.CalculateOutageDiffereance(layer)} mm");
 
             // Layer Drum Number
             table.Cell().Element(CellStyle).Text("Total Drums:");
@@ -314,15 +313,6 @@ public class Report
         }
     }
 
-    void DisplayCompanyImage(TableDescriptor table)
-    {
-        table.Cell().ColumnSpan(2)
-            .Border(0.4f, Unit.Point)
-            .Padding(10)
-            .AlignCenter()
-            .Image(SetCompanyLogo());
-    }
-
     string VesselTemplate()
     {
         string template = "Models/VesselTemplates/SingleBedVessel.svg";
@@ -331,20 +321,32 @@ public class Report
 
         switch (selection)
         {
-            case Template.SingleBed: template = "Models/VesselTemplates/SingleBedVessel.svg"; break;
-            case Template.SingleBedWithSupportGrid: template = "Models/VesselTemplates/SingleBedVesselWithTray.svg"; break;
-            case Template.SecondaryReformer: template = "Models/VesselTemplates/SecondaryReformer.svg"; break;
-            case Template.TopBed: template = "Models/VesselTemplates/MultiBedVesselTopBed.svg"; break;
-            case Template.MiddleBed: template = "Models/VesselTemplates/MultiBedVesselMiddleBed.svg"; break;
-            case Template.BottomBed: template = "Models/VesselTemplates/MultiBedVesselBottomBed.svg"; break;
+            case Template.SingleBed:
+                template = "Models/VesselTemplates/SingleBedVessel.svg";
+                break;
+            case Template.SingleBedWithSupportGrid:
+                template = "Models/VesselTemplates/SingleBedVesselWithTray.svg";
+                break;
+            case Template.SecondaryReformer:
+                template = "Models/VesselTemplates/SecondaryReformer.svg";
+                break;
+            case Template.TopBed:
+                template = "Models/VesselTemplates/MultiBedVesselTopBed.svg";
+                break;
+            case Template.MiddleBed:
+                template = "Models/VesselTemplates/MultiBedVesselMiddleBed.svg";
+                break;
+            case Template.BottomBed:
+                template = "Models/VesselTemplates/MultiBedVesselBottomBed.svg";
+                break;
         }
         return template;
     }
 
     int GetRenderOffset()
-    {      
+    {
         int renderOffset;
-        if (_vesselManager.Vessel.TemplateType == Template.SecondaryReformer || _vesselManager.Vessel.TemplateType ==  Template.SingleBedWithSupportGrid)
+        if (_vesselManager.Vessel.TemplateType == Template.SecondaryReformer || _vesselManager.Vessel.TemplateType == Template.SingleBedWithSupportGrid)
         {
             renderOffset = 100;
         }
@@ -363,23 +365,28 @@ public class Report
 
         string filePath = Path.Combine(baseDir, relevantDir);
 
-       if (_vesselManager.CompanyLogo == null || _vesselManager.CompanyLogo == "") 
+        if (_vesselManager.CompanyLogo == null || _vesselManager.CompanyLogo == "")
         {
-           return  filePath;
+            return filePath;
         }
-       else
+        else
         {
             return _vesselManager.CompanyLogo;
         }
-        
     }
-   
+
     string PlusOrMinusSymbol(Layer layer)
     {
         float value = layer.TargetOutage - layer.ActualOutage;
         int sign = Math.Sign(value);
 
         if (sign > 0) return "+";
-        else return "";  
+        else return "";
+    }
+
+    Color OutageVarienceColor(Layer layer)
+    {
+        if(layer.TargetOutage - layer.ActualOutage == 0) return Colors.Green.Lighten5;       
+        else return Colors.Amber.Lighten5;
     }
 }

@@ -9,7 +9,7 @@ public class VesselManager
     public Report Report { get; private set; }
     public List<Layer> Layers { get; private set; }
     public bool VesselCreated {  get; private set; }
-    public float CurrentOutage { get; private set; }
+  
     public string CompanyLogo { get; set; }
     public float FinalOutage { get; private set; }
 
@@ -23,7 +23,7 @@ public class VesselManager
     {
        Vessel = vessel;
        VesselCreated = true;
-       CurrentOutage = Vessel.InitialOutage;
+      
     }
     public void GenerateReport(VesselManager vesselManager, string fileName)
     {
@@ -41,12 +41,25 @@ public class VesselManager
     }
 
     public double CalculateLayerHeight(Layer layer)
-   {       
-        double layerHeight = CurrentOutage - layer.ActualOutage;
-        CurrentOutage = layer.ActualOutage;
-        layer.LayerHeight = layerHeight;
-        return layerHeight / 1000.0;
-   }
+    {
+        int layerIndex = Layers.IndexOf(layer);
+
+        double previousOutage;
+
+        if (layerIndex == 0)
+        {
+            previousOutage = Vessel.InitialOutage;
+        }
+        else
+        {
+            previousOutage = Layers[layerIndex - 1].ActualOutage;
+        }
+
+        double currentHeight = previousOutage - layer.ActualOutage;
+
+        return currentHeight / 1000.0;
+    }
+                      
     double CalculateLayerVolume(Layer layer)
     {
         double radius = (Vessel.InternalDiameter / 1000.0) / 2;
@@ -95,7 +108,7 @@ public class VesselManager
                 totalVolume += CalculateLayerVolume(layer);
             }
         }
-        CurrentOutage = Vessel.InitialOutage;
+       
 
         return totalMass / totalVolume;
     }
