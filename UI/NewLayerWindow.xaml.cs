@@ -9,7 +9,6 @@ namespace LoadReport;
 
 public partial class NewLayerWindow : Window
 {
-
     LayerType layerType;
     string productName;
     int actualOutage;

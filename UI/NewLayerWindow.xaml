@@ -6,72 +6,119 @@
         xmlns:local="clr-namespace:LoadReport"
         mc:Ignorable="d"
         Title="Add New Layer" Height="350" Width="450">
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="Auto"/> <!-- Section title -->
+            <RowDefinition Height="8"/>    <!-- Spacer -->
+            <RowDefinition Height="Auto"/> <!-- Form -->
+            <RowDefinition Height="*"/>    <!-- Filler -->
+            <RowDefinition Height="Auto"/> <!-- Footer / Actions -->
         </Grid.RowDefinitions>
-        <!-- Title-->
-        <TextBlock Text="Add Layer" FontSize="24" FontWeight="Bold" Margin="10" Grid.Row="0"/>
-        <StackPanel Orientation="Horizontal"  Grid.Row="1">
-            <TextBlock Text="Layer Information" FontSize="14" FontWeight="Bold" Margin="10,0,10,0" Grid.Row="1"/>
-        </StackPanel>
-        <!-- Layer Type -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="2">
-            <TextBlock x:Name="LayerTypeTextBlock" Text="Layer Type:"  Margin="10,5,0,5"  Width="100" />
-            <ComboBox x:Name="LayerTypeComboBox"  Margin="10,5,0,5"  Width="300">
-            </ComboBox>
-        </StackPanel>
-        <!-- Product Name -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="3">
-            <TextBlock x:Name="ProductNameTextBlock" Text="Product Name:" Margin="10,5,0,5"  Width="100" />
-            <TextBox x:Name="ProductNameTextBox" Margin="10,5,0,5"  Width="300"/>
-        </StackPanel>
-        <!-- Actual Outage -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="4">
-            <TextBlock x:Name="ActualOutageTextBlock" Text="Actual Outage:" Margin="10,5,0,5"  Width="100" />
-            <TextBox x:Name="ActualOutageTextBox" Margin="10,5,0,5"  Width="300"/>
-        </StackPanel>
-        <!-- Target Outage -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="5">
-            <TextBlock x:Name="TargetOutageTextBlock" Text="Target Outage:" Margin="10,5,0,5"  Width="100" />
-            <TextBox x:Name="TargetOutageTextBox" Margin="10,5,0,5"  Width="300"/>
-        </StackPanel>
-        <!-- Drum Quantity -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="6">
-            <TextBlock x:Name="DrumQuantityTextBlock" Text="Drum Quantity:" Margin="10,5,0,5"  Width="100" />
-            <TextBox x:Name="DrumQuantityTextBox" Margin="10,5,0,5"  Width="300"/>
-        </StackPanel>
-        <!-- Drum Net Weight -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="7">
-            <TextBlock x:Name="DrumNetWeightTextBlock" Text="Drum Net Weight:" Margin="10,5,0,5"  Width="100" />
-            <TextBox x:Name="DrumNetWeightTextBox" Margin="10,5,0,5"  Width="300"/>
-        </StackPanel>
-        <!-- Load Method -->
-        <StackPanel Orientation="Horizontal"  Grid.Row="8">
-        <TextBlock x:Name="LoadMethodTextBlock" Text="Load Method:"  Margin="10,5,0,5"  Width="100" />
-        <ComboBox x:Name="LoadMethodComboBox"  Margin="10,5,0,5"  Width="300">
-            <ComboBoxItem Content="Sock"/>
-            <ComboBoxItem Content="Dense"/>
-            <ComboBoxItem Content="Static Dense"/>
-            <ComboBoxItem Content="Bucket"/>
+
+        <!-- Header -->
+        <TextBlock Text="Add Layer"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Grid.Row="0"/>
+
+        <!-- Section title -->
+        <TextBlock Text="Layer Information"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Margin="0,8,0,0"
+                   Grid.Row="1"/>
+
+        <!-- Form -->
+        <Grid Grid.Row="3" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Layer Type -->
+                <RowDefinition Height="Auto"/> <!-- Product Name -->
+                <RowDefinition Height="Auto"/> <!-- Actual Outage -->
+                <RowDefinition Height="Auto"/> <!-- Target Outage -->
+                <RowDefinition Height="Auto"/> <!-- Drum Quantity -->
+                <RowDefinition Height="Auto"/> <!-- Drum Net Weight -->
+                <RowDefinition Height="Auto"/> <!-- Load Method -->
+            </Grid.RowDefinitions>
+
+            <!-- Layer Type -->
+            <TextBlock x:Name="LayerTypeTextBlock" Grid.Row="0" Grid.Column="0"
+                       Text="Layer Type:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <ComboBox x:Name="LayerTypeComboBox"
+                      Grid.Row="0" Grid.Column="1"
+                      Margin="0,5,0,5"/>
+
+            <!-- Product Name -->
+            <TextBlock x:Name="ProductNameTextBlock" Grid.Row="1" Grid.Column="0"
+                       Text="Product Name:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <TextBox x:Name="ProductNameTextBox"
+                     Grid.Row="1" Grid.Column="1"
+                     Margin="0,5,0,5"/>
+
+            <!-- Actual Outage -->
+            <TextBlock x:Name="ActualOutageTextBlock" Grid.Row="2" Grid.Column="0"
+                       Text="Actual Outage:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <TextBox x:Name="ActualOutageTextBox"
+                     Grid.Row="2" Grid.Column="1"
+                     Margin="0,5,0,5"/>
+
+            <!-- Target Outage -->
+            <TextBlock x:Name="TargetOutageTextBlock" Grid.Row="3" Grid.Column="0"
+                       Text="Target Outage:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <TextBox x:Name="TargetOutageTextBox"
+                     Grid.Row="3" Grid.Column="1"
+                     Margin="0,5,0,5"/>
+
+            <!-- Drum Quantity -->
+            <TextBlock x:Name="DrumQuantityTextBlock" Grid.Row="4" Grid.Column="0"
+                       Text="Drum Quantity:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <TextBox x:Name="DrumQuantityTextBox"
+                     Grid.Row="4" Grid.Column="1"
+                     Margin="0,5,0,5"/>
+
+            <!-- Drum Net Weight -->
+            <TextBlock x:Name="DrumNetWeightTextBlock" Grid.Row="5" Grid.Column="0"
+                       Text="Drum Net Weight:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <TextBox x:Name="DrumNetWeightTextBox"
+                     Grid.Row="5" Grid.Column="1"
+                     Margin="0,5,0,5"/>
+
+            <!-- Load Method -->
+            <TextBlock x:Name="LoadMethodTextBlock" Grid.Row="6" Grid.Column="0"
+                       Text="Load Method:"
+                       VerticalAlignment="Center"
+                       Margin="0,5,8,5"/>
+            <ComboBox x:Name="LoadMethodComboBox"
+                      Grid.Row="6" Grid.Column="1"
+                      Margin="0,5,0,5">
+                <ComboBoxItem Content="Sock"/>
+                <ComboBoxItem Content="Dense"/>
+                <ComboBoxItem Content="Static Dense"/>
+                <ComboBoxItem Content="Bucket"/>
                 <ComboBoxItem Content="N/A"/>
             </ComboBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal"  Grid.Row="11">
-            <Button Content=" Add " Margin="10,5,0,5" Click="AddLayerConfirm_Click" />
-        </StackPanel>
+        </Grid>
 
+        <!-- Actions -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Add" Margin="0,0,0,0" Click="AddLayerConfirm_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

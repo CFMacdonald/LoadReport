@@ -18,13 +18,15 @@ public partial class MainWindow : Window
     int initalOutage;
     int internalDiamater;
     VesselManager _vesselManager;
-   
+    Brush defaultBrush;
+
 
     public MainWindow()
     {
         InitializeComponent();
         _vesselManager = new VesselManager();
         VesselTypeComboBox.ItemsSource = Enum.GetValues<Template>();
+        defaultBrush = (Brush)new BrushConverter().ConvertFromString("#E6E6E6");
 
     }
 
@@ -34,7 +36,7 @@ public partial class MainWindow : Window
         newLayerWindow.Show();
         newLayerWindow.GetVesselManager(_vesselManager);
         newLayerWindow.GetMainWindow(this);
-        ButtonRemoveLayer.BorderBrush = Brushes.Black;
+        ButtonRemoveLayer.BorderBrush = defaultBrush;
     }
 
     private void Generate_Button_Click(object sender, RoutedEventArgs e)
@@ -99,7 +101,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            JobDescriptionTextBlock.Foreground = Brushes.Black;
+            JobDescriptionTextBlock.Foreground = defaultBrush;
             return true;
         }
     }
@@ -113,7 +115,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            JobNumberTextBlock.Foreground = Brushes.Black;
+            JobNumberTextBlock.Foreground = defaultBrush;
             return true;
         }
     }
@@ -127,7 +129,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            ClientNameTextBlock.Foreground = Brushes.Black;
+            ClientNameTextBlock.Foreground = defaultBrush;
             return true;
         }
     }
@@ -141,7 +143,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            ClientAddressTextBlock.Foreground = Brushes.Black;
+            ClientAddressTextBlock.Foreground = defaultBrush;
             return true;
         }
     }
@@ -155,7 +157,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            VesselIDTextBlock.Foreground = Brushes.Black;
+           VesselIDTextBlock.Foreground = defaultBrush;
             return true;
         }
     }
@@ -171,7 +173,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            VesselTypeTextBlock.Foreground = Brushes.Black;
+            VesselTypeTextBlock.Foreground = defaultBrush;
             templateType = (Template)selectedItem;
             return true;
         }
@@ -184,7 +186,7 @@ public partial class MainWindow : Window
         bool pass = Int32.TryParse(selectedItem.ToString(), out bedNumber);
         if (pass)
         {
-            BedNumberTextBlock.Foreground = Brushes.Black;
+            BedNumberTextBlock.Foreground = defaultBrush;
             return true;
         }
         else
@@ -200,7 +202,7 @@ public partial class MainWindow : Window
         bool pass = Int32.TryParse(InitialOutageTextBox.Text, out initalOutage);
         if (pass)
         {
-            InitialOutageTextBlock.Foreground = Brushes.Black;
+            InitialOutageTextBlock.Foreground = defaultBrush;
             return true;
         }
         else
@@ -216,7 +218,7 @@ public partial class MainWindow : Window
         bool pass = Int32.TryParse(InternalDiameterTextBox.Text, out internalDiamater);
         if (pass)
         {
-            InternalDiameterTextBlock.Foreground = Brushes.Black;
+            InternalDiameterTextBlock.Foreground = defaultBrush;
             return true;
         }
         else
@@ -272,5 +274,7 @@ public partial class MainWindow : Window
     {
         Application.Current.Shutdown();
     }
+
+    
 }
 
