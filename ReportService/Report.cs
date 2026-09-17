@@ -103,8 +103,8 @@ public class Report
             });
         })
 
-        .ShowInCompanion();
-        //.GeneratePdf($"{FileName}");
+        //.ShowInCompanion();
+        .GeneratePdf($"{FileName}");
     }
 
     void RenderVessel(LayersDescriptor layer)

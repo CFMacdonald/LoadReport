@@ -17,5 +17,9 @@
 		<None Update="ReportService/**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Resource Include="UI\Images\Refinery.png" />
+	</ItemGroup>
+
 	
 </Project>

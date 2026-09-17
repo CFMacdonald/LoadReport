@@ -267,5 +267,10 @@ public partial class MainWindow : Window
 
         _vesselManager.CompanyLogo = openFileDialog.FileName;
     }
+
+    private void Exit_Click(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
+    }
 }
 
