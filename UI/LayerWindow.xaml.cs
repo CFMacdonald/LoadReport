@@ -153,6 +153,12 @@ public partial class NewLayerWindow : Window
     {
         _mainWindow = window;
     }
+  
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        Window.GetWindow(this).Close();
     }
+}
 
 
