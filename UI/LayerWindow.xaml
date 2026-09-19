@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:LoadReport"
         mc:Ignorable="d"
         Title="LayerWindow"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
         WindowStyle="None"
         Height="420"
         Width="420"
@@ -24,28 +27,32 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
+    <Border CornerRadius="12">
+        <Border.Background>
+            <ImageBrush ImageSource="Images/Refinery.png"
+                    Stretch="UniformToFill"/>
+        </Border.Background>
 
-        <Image Grid.RowSpan="3"
-               Source="Images/Refinery.png"
-               Stretch="UniformToFill" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Border Background="#1B1B1B">
-                <TextBlock Text="Add Product Layer"
+
+
+            <Grid Grid.Row="0">
+                <Border Background="#1B1B1B" MouseDown="Border_MouseDown" CornerRadius="12,12,0,0">
+                    <TextBlock Text="Add Product Layer"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="#E6E6E6"
                            Margin="10"
                            VerticalAlignment="Center" />
-            </Border>
+                </Border>
 
-            <Button Content="X"
+                <Button Content="X"
                     Foreground="#E6E6E6"
                     Background="Transparent"
                     BorderBrush="Transparent"
@@ -55,142 +62,150 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="0,0,10,0"
-                    Click="Button_Click"
+                    Click="ExitButton_Click"
                     Style="{StaticResource Exit}">
-            </Button>
-        </Grid>
+                </Button>
+            </Grid>
 
-        <Grid Grid.Row="1">
-            <Border Background="#D9232323"
+            <Grid Grid.Row="1">
+                <Border Background="#D9232323"
                     CornerRadius="12"
                     Margin="10"
                     Padding="15">
-                <StackPanel Orientation="Vertical">
-                    <!-- Layer type -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="LayerTypeTextBlock"
+                    <StackPanel Orientation="Vertical">
+                        <!-- Layer type -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="LayerTypeTextBlock"
                                    Text="Layer Type:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
 
-                        <ComboBox x:Name="LayerTypeComboBox"
+                            <ComboBox x:Name="LayerTypeComboBox"
                                   Margin="10,5,0,5"
                                   Width="210"
                                   Style="{StaticResource BaseComboBoxStyle}" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Product name -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="ProductNameTextBlock"
+                        <!-- Product name -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ProductNameTextBlock"
                                    Text="Product Name:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
 
-                        <TextBox x:Name="ProductNameTextBox"
+                            <TextBox x:Name="ProductNameTextBox"
                                  Margin="10,5,0,5"
                                  Width="210"
                                  Style="{StaticResource BaseTextBoxStyle}" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Actual outage -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="ActualOutageTextBlock"
+                        <!-- Actual outage -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ActualOutageTextBlock"
                                    Text="Actual Outage:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
 
-                        <TextBox x:Name="ActualOutageTextBox"
+                            <TextBox x:Name="ActualOutageTextBox"
                                  Margin="10,5,0,5"
                                  Width="210"
                                  Style="{StaticResource BaseTextBoxStyle}" />
-                        <TextBlock Text="mm"
+                            <TextBlock Text="mm"
                                    Style="{StaticResource BodyTextBlock}"
                                    Margin="2,10,0,0" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Target outage -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="TargetOutageTextBlock"
+                        <!-- Target outage -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="TargetOutageTextBlock"
                                    Text="Target Outage:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
 
-                        <TextBox x:Name="TargetOutageTextBox"
+                            <TextBox x:Name="TargetOutageTextBox"
                                  Margin="10,5,0,5"
                                  Width="210"
                                  Style="{StaticResource BaseTextBoxStyle}" />
-                        <TextBlock Text="mm"
+                            <TextBlock Text="mm"
                                    Style="{StaticResource BodyTextBlock}"
                                    Margin="2,10,0,0" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Drum quantity -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="DrumQuantityTextBlock"
+                        <!-- Drum quantity -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="DrumQuantityTextBlock"
                                    Text="Drum Quantity:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
-                        <TextBox x:Name="DrumQuantityTextBox"
+                            <TextBox x:Name="DrumQuantityTextBox"
                                  Margin="10,5,0,5"
                                  Width="210"
                                  Style="{StaticResource BaseTextBoxStyle}" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Drum net weight -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="DrumNetWeightTextBlock"
+                        <!-- Drum net weight -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="DrumNetWeightTextBlock"
                                    Text="Drum Net Weight:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
-                        <TextBox x:Name="DrumNetWeightTextBox"
+                            <TextBox x:Name="DrumNetWeightTextBox"
                                  Margin="10,5,0,5"
                                  Width="210"
                                  Style="{StaticResource BaseTextBoxStyle}" />
-                        <TextBlock Text="kg"
+                            <TextBlock Text="kg"
                                    Style="{StaticResource BodyTextBlock}"
                                    Margin="2,10,0,0" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Load method -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="LoadMethodTextBlock"
+                        <!-- Load method -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="LoadMethodTextBlock"
                                    Text="Load Method:"
                                    Margin="10,5,0,5"
                                    Width="100"
                                    Style="{StaticResource BodyTextBlock}" />
-                        
-                        <ComboBox x:Name="LoadMethodComboBox"
+
+                            <ComboBox x:Name="LoadMethodComboBox"
                      Style="{StaticResource BaseComboBoxStyle}"
                       Margin="10,5,0,5"
                                   Width="210">
-                            
-                            <ComboBoxItem Content="Sock"/>
-                            <ComboBoxItem Content="Dense"/>
-                            <ComboBoxItem Content="Static Dense"/>
-                            <ComboBoxItem Content="Bucket"/>
-                            <ComboBoxItem Content="N/A"/>
-                        </ComboBox>
-                    </StackPanel>
 
-                    <!-- Confirm layer -->
-                    <StackPanel Orientation="Vertical"
+                                <ComboBoxItem Content="Sock"/>
+                                <ComboBoxItem Content="Dense"/>
+                                <ComboBoxItem Content="Static Dense"/>
+                                <ComboBoxItem Content="Bucket"/>
+                                <ComboBoxItem Content="N/A"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Confirm layer -->
+                        <StackPanel Orientation="Vertical"
                                 Margin="0,10,0,0">
-                        <Button Content="Add"
+                            <Button Content="Add"
                                 Style="{StaticResource BaseButtonStyle}"
                                 Click="AddLayerConfirm_Click" />
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Border>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Border Background="#1B1B1B" CornerRadius="0,0,12,12">
+                    
+                    <TextBlock Text="Developed by Connor Macdonald"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               FontStyle="Italic"
+                               Foreground="#A8A8A8"
+                               Margin="10,0,10,0" />    
+                </Border>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="2">
-            <Border Background="#1B1B1B">
-            </Border>
-        </Grid>
-    </Grid>
+    </Border>
 </Window>

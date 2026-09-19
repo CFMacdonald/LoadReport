@@ -25,6 +25,7 @@ public class VesselManager
        VesselCreated = true;
       
     }
+
     public void GenerateReport(VesselManager vesselManager, string fileName)
     {
         Report = new Report(vesselManager, fileName);
@@ -35,6 +36,7 @@ public class VesselManager
         Layers.Add(layer);
         
     }
+
     public void RemoveLayer()
     {
         Layers.RemoveAt(Layers.Count - 1);

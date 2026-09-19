@@ -30,16 +30,16 @@ public partial class MainWindow : Window
 
     }
 
-    private void LayerButton_Click(object sender, RoutedEventArgs e)
+    void LayerButton_Click(object sender, RoutedEventArgs e)
     {
         NewLayerWindow newLayerWindow = new NewLayerWindow();
         newLayerWindow.Show();
         newLayerWindow.GetVesselManager(_vesselManager);
         newLayerWindow.GetMainWindow(this);
-        ButtonRemoveLayer.BorderBrush = defaultBrush;
+        ButtonRemoveLayer.BorderBrush = null;
     }
 
-    private void Generate_Button_Click(object sender, RoutedEventArgs e)
+    void Generate_Button_Click(object sender, RoutedEventArgs e)
     {
         AssignTextBox();
 
@@ -82,7 +82,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private static string SaveFileDialog()
+    static string SaveFileDialog()
     {
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
         saveFileDialog1.Filter = "PDF|*.pdf";
@@ -228,13 +228,19 @@ public partial class MainWindow : Window
         }
     }    
 
-    public void RefreshDisplay()
+    public void RefreshLayerDisplay()
     {
         int lastEntry = _vesselManager.Layers.Count - 1;
 
         Layer layer = _vesselManager.Layers[lastEntry];
 
         LayerListBox.Items.Add($"Layer: {lastEntry + 1} {layer.LayerType} {layer.ProductName} Outage: {layer.ActualOutage}mm ");
+    }
+
+    public void RefreshLogoDisplay()
+    {
+      LogoListBox.Items.Clear();
+      LogoListBox.Items.Add($"{_vesselManager.CompanyLogo}");       
     }
 
     void RemoveLayer_Click(object sender, RoutedEventArgs e)
@@ -261,20 +267,25 @@ public partial class MainWindow : Window
         vesselID = VesselIDTextBox.Text;
     }
 
-    private void AddCompanyLogoClick(object sender, RoutedEventArgs e)
-    {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-
-        openFileDialog.ShowDialog();
-
-        _vesselManager.CompanyLogo = openFileDialog.FileName;
+    void AddCompanyLogoClick(object sender, RoutedEventArgs e)
+    {      
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.ShowDialog();
+            _vesselManager.CompanyLogo = openFileDialog.FileName;       
+            RefreshLogoDisplay();
     }
 
-    private void Exit_Click(object sender, RoutedEventArgs e)
+    void Exit_Click(object sender, RoutedEventArgs e)
     {
         Application.Current.Shutdown();
     }
 
-    
+   void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+        {
+            this.DragMove();
+        }
+    }
 }
 

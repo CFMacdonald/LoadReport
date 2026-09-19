@@ -104,7 +104,8 @@ public class Report
         })
 
         //.ShowInCompanion();
-        .GeneratePdf($"{FileName}");
+         .GeneratePdf($"{FileName}");
+           
     }
 
     void RenderVessel(LayersDescriptor layer)

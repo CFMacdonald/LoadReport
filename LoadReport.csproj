@@ -6,7 +6,19 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Icons\LoadReportIcon.ico</ApplicationIcon>
+
+	  <PublishSingleFile>true</PublishSingleFile>
+	  <SelfContained>true</SelfContained>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	  <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+
+	  
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\LoadReportIcon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="QuestPDF" Version="2026.8.0" />

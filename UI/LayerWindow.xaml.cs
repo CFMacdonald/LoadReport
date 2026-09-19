@@ -20,11 +20,13 @@ public partial class NewLayerWindow : Window
     public bool layerCreated { get; private set; } = false;
     VesselManager _vesselManager;
     MainWindow _mainWindow;
+    Brush defaultBrush;
 
     public NewLayerWindow()
     {
         InitializeComponent();
         LayerTypeComboBox.ItemsSource = Enum.GetValues<LayerType>();
+        defaultBrush = (Brush)new BrushConverter().ConvertFromString("#E6E6E6");
     }
 
     private void AddLayerConfirm_Click(object sender, RoutedEventArgs e)
@@ -41,13 +43,14 @@ public partial class NewLayerWindow : Window
         {  
             NewLayer = new Layer(layerType!, productName, actualOutage, targetOutage, drumQuanity, drumNetWeight, loadMethod!);
             _vesselManager.AddLayer(NewLayer);
-            _mainWindow.RefreshDisplay();        
+            _mainWindow.RefreshLayerDisplay();        
             Close();
         }
     }
+
         bool ValidateLayerType()
         {
-        var selectedItem = LayerTypeComboBox.SelectionBoxItem;
+        var selectedItem = LayerTypeComboBox.SelectedItem;
         if (selectedItem == null)
         {
             LayerTypeTextBlock.Foreground = Brushes.Red;
@@ -55,11 +58,12 @@ public partial class NewLayerWindow : Window
         }
         else
         {
-            LayerTypeTextBlock.Foreground = Brushes.Black;
+            LayerTypeTextBlock.Foreground = defaultBrush;
             layerType = (LayerType)selectedItem;
             return true;
         }
         }
+
         bool ValidateProductName()
         {
             productName = ProductNameTextBox.Text;
@@ -70,16 +74,17 @@ public partial class NewLayerWindow : Window
             }
             else
             {
-                ProductNameTextBlock.Foreground = Brushes.Black;
+            ProductNameTextBlock.Foreground = defaultBrush;
                 return true;
             }
         }
+
         bool ValidateActualOutage()
         {             
             bool pass = Int32.TryParse(ActualOutageTextBox.Text, out actualOutage);
             if (pass)
             {
-                ActualOutageTextBlock.Foreground = Brushes.Black;
+            ActualOutageTextBlock.Foreground = defaultBrush;
                 return true;
             }
             else
@@ -88,13 +93,14 @@ public partial class NewLayerWindow : Window
                 return false;
             }
         }
+
         bool ValidateTargetOutage()
         {             
             bool pass = Int32.TryParse(TargetOutageTextBox.Text, out targetOutage);
             if (pass)
             {
-                TargetOutageTextBlock.Foreground = Brushes.Black;
-                return true;
+                TargetOutageTextBlock.Foreground = defaultBrush;
+            return true;
             }
             else
             {
@@ -102,13 +108,14 @@ public partial class NewLayerWindow : Window
                 return false;
             }
         }
+
         bool ValidateDrumQuanity()
         {            
             bool pass = double.TryParse(DrumQuantityTextBox.Text, out drumQuanity);
             if (pass)
             {
-                DrumQuantityTextBlock.Foreground = Brushes.Black;
-                return true;
+                DrumQuantityTextBlock.Foreground = defaultBrush;
+            return true;
             }
             else
             {
@@ -116,13 +123,15 @@ public partial class NewLayerWindow : Window
                 return false;
             }
         }
+
+
         bool ValidateDrumWeight()
         {         
             bool pass = double.TryParse(DrumNetWeightTextBox.Text, out drumNetWeight);
             if (pass)
             {
-                DrumNetWeightTextBlock.Foreground = Brushes.Black;
-                return true;
+                DrumNetWeightTextBlock.Foreground = defaultBrush;
+            return true;
             }
             else
             {
@@ -130,34 +139,45 @@ public partial class NewLayerWindow : Window
                 return false;
             }
         }
+
         bool ValidateLoadingMethod()
         {
-        var selectedItem = LoadMethodComboBox.SelectionBoxItem;
-            if (selectedItem == null)
+            var selectedItem = LoadMethodComboBox.SelectionBoxItem;
+            if (string.IsNullOrEmpty(selectedItem.ToString()))
             {
                 LoadMethodTextBlock.Foreground = Brushes.Red;
                 return false;
             }
             else
             {
-                LoadMethodTextBlock.Foreground = Brushes.Black;
-                loadMethod = selectedItem.ToString();
-                return true;
+                LoadMethodTextBlock.Foreground = defaultBrush;
+                loadMethod = (string)selectedItem;
+            return true;
             }
         }
+
     public void GetVesselManager(VesselManager vesselManager)
     {
         _vesselManager = vesselManager;
     }
+
     public void GetMainWindow(MainWindow window)
     {
         _mainWindow = window;
     }
-  
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    void ExitButton_Click(object sender, RoutedEventArgs e)
     {
         Window.GetWindow(this).Close();
+    }
+
+    void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == System.Windows.Input.MouseButton.Left) 
+        {
+            this.DragMove();
+        }
+
     }
 }
 

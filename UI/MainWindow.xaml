@@ -6,6 +6,9 @@
     xmlns:local="clr-namespace:LoadReport"
     mc:Ignorable="d"
     WindowStyle="None"
+    ResizeMode="NoResize"
+    AllowsTransparency="True"
+    Background="Transparent"
     Title="Load Report Generator"
     Height="580"
     Width="810"
@@ -23,34 +26,32 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
-    
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
 
-        <Image Grid.RowSpan="3"
-               Source="Images/Refinery.png"
-               Stretch="UniformToFill" />
 
-        <!-- Header -->
-        <Grid Grid.Row="0">
-            <Border Background="#1B1B1B">
-                <TextBlock Text="Load Report Generator"
+    <Border CornerRadius="12">
+        <Border.Background>
+            <ImageBrush ImageSource="Images/Refinery.png"
+                        Stretch="UniformToFill"/>
+        </Border.Background>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <Border Background="#1B1B1B" MouseDown="Border_MouseDown" CornerRadius="12,12,0,0">
+                    <TextBlock Text="Load Report Generator"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="#E6E6E6"
                            Margin="10"
                            VerticalAlignment="Center" />
-                
-               
-            </Border>
+                </Border>
 
-            <Button Content="X"
+                <Button Content="X"
             Foreground="#E6E6E6"
             Background="Transparent"
             BorderBrush="Transparent"
@@ -62,261 +63,286 @@
             Margin="0,0,10,0"
             Click="Exit_Click"
             Style="{StaticResource Exit}">
-            </Button>
+                </Button>
 
 
-        </Grid>
+            </Grid>
 
-        <!-- Body -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <!-- Body -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <!-- Left Hand side -->
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                <!-- Left Hand side -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <!-- Left Hand Top Section -->
-                <Grid Grid.Row="0">
-                    <Border Background="#D9232323"
+                    <!-- Left Hand Top Section -->
+                    <Grid Grid.Row="0">
+                        <Border Background="#D9232323"
                             CornerRadius="12"
                             Margin="10"
                             Padding="15">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Project Information"
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Project Information"
                                        Style="{StaticResource HeaderTextBlock}"
                                        Margin="10,0,10,0" />
-                            <StackPanel Orientation="Horizontal">
-                                
-                                <TextBlock x:Name="JobDescriptionTextBlock"
+                                <StackPanel Orientation="Horizontal">
+
+                                    <TextBlock x:Name="JobDescriptionTextBlock"
                                            Text="Job Description:"                                       
                                            Margin="10,5,0,5"
                                            Width="100" 
                                            Style="{StaticResource BodyTextBlock}"/>
 
-                                <TextBox x:Name="JobDescriptionTextBox" 
+                                    <TextBox x:Name="JobDescriptionTextBox" 
                                          Margin="10,5,0,5" 
                                          Width="210"
                                          Style="{StaticResource BaseTextBoxStyle}" />
 
-                            </StackPanel>
-                            <!-- Job Number -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="JobNumberTextBlock"
+                                </StackPanel>
+                                <!-- Job Number -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="JobNumberTextBlock"
                                            Text="Job Number:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="JobNumberTextBox" 
+                                    <TextBox x:Name="JobNumberTextBox" 
                                          Margin="10,5,0,5" 
                                          Width="210" 
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                                         
-                            </StackPanel>
-                            <!-- Client Name -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="ClientNameTextBlock"
+
+                                </StackPanel>
+                                <!-- Client Name -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="ClientNameTextBlock"
                                            Text="Client Name:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="ClientNameTextBox" 
+                                    <TextBox x:Name="ClientNameTextBox" 
                                          Margin="10,5,0,5" 
                                          Width="210" 
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                            </StackPanel>
-                            <!-- Client Address -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="ClientAddressTextBlock"
+                                </StackPanel>
+                                <!-- Client Address -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="ClientAddressTextBlock"
                                            Text="Client Address:"
                                             Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="ClientAddressTextBox" 
+                                    <TextBox x:Name="ClientAddressTextBox" 
                                          Margin="10,5,0,5" 
                                          Width="210" 
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                            </StackPanel>
-                            <!-- Company Logo -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="AddCompanyLogoTextBlock"
+                                </StackPanel>
+                                <!-- Company Logo -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="AddCompanyLogoTextBlock"
                                            Text="Company Logo:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <Button Content="Add"
+                                    <Button Content="Add"
                                         Margin="10,5,0,5"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Click="AddCompanyLogoClick" />
+                                    <ListBox x:Name="LogoListBox"
+                                         Background="#2C2C2C"
+                                         Foreground="#E6E6E6"
+                                         Margin="10,5,0,5"
+                                         Width="163"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
-                </Grid>
+                        </Border>
+                    </Grid>
 
-                <!-- Left Hand Bottom Section -->
-                <Grid Grid.Row="1">
-                    <Border Background="#D9232323"
+                    <!-- Left Hand Bottom Section -->
+                    <Grid Grid.Row="1">
+                        <Border Background="#D9232323"
                             CornerRadius="12"
                             Margin="10"
                             Padding="15">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Vessel Information"
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Vessel Information"
                                        Style="{StaticResource HeaderTextBlock}"
                                        Margin="10,0,10,0" />
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="VesselIDTextBlock"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="VesselIDTextBlock"
                                            Text="Vessel ID:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="VesselIDTextBox"
+                                    <TextBox x:Name="VesselIDTextBox"
                                          Margin="10,5,0,5"
                                          Width="210"
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                            </StackPanel>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="VesselTypeTextBlock"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="VesselTypeTextBlock"
                                            Text="Vessel Template:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <ComboBox x:Name="VesselTypeComboBox"
+                                    <ComboBox x:Name="VesselTypeComboBox"
                                           Margin="10,5,0,5"
                                           Width="150"
                                           Style="{StaticResource BaseComboBoxStyle}" />
-                            </StackPanel>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="BedNumberTextBlock"
-                                           Text="Bed Number:"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="BedNumberTextBlock"
+                                           Text="Bed Number"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <ComboBox x:Name="BedNumberComboBox"
+                                    <ComboBox x:Name="BedNumberComboBox"
                                           Margin="10,5,0,5"
                                           Width="150"
                                           Style="{StaticResource BaseComboBoxStyle}">
-                                    <ComboBoxItem Content="1" />
-                                    <ComboBoxItem Content="2" />
-                                    <ComboBoxItem Content="3" />
-                                    <ComboBoxItem Content="4" />
-                                    <ComboBoxItem Content="5" />
-                                </ComboBox>
-                            </StackPanel>
+                                        <ComboBoxItem Content="1" />
+                                        <ComboBoxItem Content="2" />
+                                        <ComboBoxItem Content="3" />
+                                        <ComboBoxItem Content="4" />
+                                        <ComboBoxItem Content="5" />
+                                    </ComboBox>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="InitialOutageTextBlock"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="InitialOutageTextBlock"
                                            Text="Initial Outage:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="InitialOutageTextBox"
+                                    <TextBox x:Name="InitialOutageTextBox"
                                          Margin="10,5,0,5"
                                          Width="210"
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                                <TextBlock Text="mm"
+                                    <TextBlock Text="mm"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="2,10,0,0" />
-                            </StackPanel>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="InternalDiameterTextBlock"
-                                           Text="Internal Diameter:"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="InternalDiameterTextBlock"
+                                           Text="Internal &#x0a;Diameter:"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="10,5,0,5"
                                            Width="100" />
-                                <TextBox x:Name="InternalDiameterTextBox"
+                                    <TextBox x:Name="InternalDiameterTextBox"
                                          Margin="10,5,0,5"
                                          Width="210"
                                          Style="{StaticResource BaseTextBoxStyle}" />
-                                <TextBlock Text="mm"
+                                    <TextBlock Text="mm"
                                            Style="{StaticResource BodyTextBlock}"
                                            Margin="2,10,0,0" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
+                    </Grid>
                 </Grid>
-            </Grid>
 
-            <!-- Right Hand Side -->
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="4*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                <!-- Right Hand Side -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <!-- Right Hand Top Section -->
-                <Grid Grid.Row="0">
-                    <Border Background="#D9232323"
+                    <!-- Right Hand Top Section -->
+                    <Grid Grid.Row="0">
+                        <Border Background="#D9232323"
                             CornerRadius="12"
                             Margin="10"
                             Padding="15">
-                        <StackPanel Orientation="Vertical">
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Media Layers:"
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Media Layers:"
                                            Style="{StaticResource HeaderTextBlock}"
                                            Margin="10,5,0,5"
                                             />
-                                <Button Content="Add Layer"
+                                    <Button Content="Add Layer"
                                         Margin="10,5,0,5"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Click="LayerButton_Click" />
-                                <Button x:Name="ButtonRemoveLayer"
+                                    <Button x:Name="ButtonRemoveLayer"
                                         Content="Remove Last"
                                         Margin="10,5,0,5"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Click="RemoveLayer_Click" />
-                            </StackPanel>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                
-                                <ListBox x:Name="LayerListBox"
-                                         Background="#232323"
+                                <StackPanel Orientation="Horizontal">
+
+                                    <ListBox x:Name="LayerListBox"
+                                         Background="#2C2C2C"
                                          Margin="10,5,0,5"
                                          Width="330"
                                          Height="280"  
-                                         Foreground="#E6E6E6" 
-                                         FontFamily="Inter 18pt 18pt" 
-                                         FontSize="16"  />
+                                         Foreground="#E6E6E6"                                         
+                                         FontSize="12"  />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
-                </Grid>
+                        </Border>
+                    </Grid>
 
-                <!-- Right Hand Bottom Section -->
-                <Grid Grid.Row="1">
-                    <Border Background="#D9232323"
+                    <!-- Right Hand Bottom Section -->
+                    <Grid Grid.Row="1">
+                        <Border Background="#D9232323"
                             CornerRadius="12"
                             Margin="10"
                             Padding="15">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Report"
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Report"
                                        FontSize="14"
                                        FontWeight="Bold"
                                        Foreground="#E6E6E6"
                                        Margin="10,0,10,0" />
-                            <Button Content="Generate"
+                                <Button Content="Generate"
                                     Margin="10,5,0,5"
                                     Style="{StaticResource BaseButtonStyle}"
                                     Click="Generate_Button_Click" />
-                        </StackPanel>
-                    </Border>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
 
-        <!-- Footer -->
-        <Grid Grid.Row="2">
-            <Border Background="#1B1B1B">
-            </Border>
+            <!-- Footer -->
+            <Grid Grid.Row="2">
+
+                <Border Background="#1B1B1B"
+            CornerRadius="0,0,12,12">
+
+                    <Grid>
+                        <TextBlock Text="Professional Reports Made Easy"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   FontStyle="Italic"
+                                   Foreground="#A8A8A8"
+                                   Margin="10,0,10,0" />
+
+                        <TextBlock Text="Developed by Connor Macdonald"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   FontStyle="Italic"
+                                   Foreground="#A8A8A8"
+                                   Margin="10,0,10,0" />    
+                    </Grid>
+
+                </Border>
+
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>
