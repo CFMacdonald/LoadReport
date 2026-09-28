@@ -332,13 +332,13 @@ public class Report
                 template = "Models/VesselTemplates/SecondaryReformer.svg";
                 break;
             case Template.TopBed:
-                template = "Models/VesselTemplates/MultiBedVesselTopBed.svg";
+                template = "Models/VesselTemplates/TopBed.svg";
                 break;
             case Template.MiddleBed:
-                template = "Models/VesselTemplates/MultiBedVesselMiddleBed.svg";
+                template = "Models/VesselTemplates/MiddleBed.svg";
                 break;
             case Template.BottomBed:
-                template = "Models/VesselTemplates/MultiBedVesselBottomBed.svg";
+                template = "Models/VesselTemplates/BottomBed.svg";
                 break;
         }
         return template;
