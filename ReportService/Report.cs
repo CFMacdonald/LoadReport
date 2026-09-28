@@ -387,7 +387,19 @@ public class Report
 
     Color OutageVarienceColor(Layer layer)
     {
-        if(layer.TargetOutage - layer.ActualOutage == 0) return Colors.Green.Lighten5;       
-        else return Colors.Amber.Lighten5;
+        int variance = layer.TargetOutage - layer.ActualOutage;
+
+        if (variance > 0 && variance < 100 || variance < 0 && variance > -100)
+        {
+            return Colors.Amber.Lighten3;
+        }
+        else if (variance == 0)
+        {
+            return Colors.Green.Lighten3;
+        }
+        else
+        {
+            return Colors.Red.Lighten3;
+        }
     }
 }
