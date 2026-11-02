@@ -229,7 +229,7 @@ public class Report
         table.Cell().Element(CellStyle).Text("Final Outage:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.GetFinalOutage()}mm");
         // Bed Densety
-        table.Cell().Element(CellStyle).Text("Catalyst/Media Bed Density:");
+        table.Cell().Element(CellStyle).Text("Main Catalyst/Media Bed Bulk Density:");
         table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateBedDensity():F2}kg/m3");
 
         static IContainer CellStyle(IContainer container)
@@ -281,16 +281,25 @@ public class Report
 
             // Layer Target Outage
             table.Cell().Element(CellStyle).Text("Target Outage:");
-            table.Cell().Element(CellStyle).Text($"{layer.TargetOutage} mm");
+            if (layer.TargetOutage != 0)
+            {
+                table.Cell().Element(CellStyle).Text($"{layer.TargetOutage} mm");
+            }
+            else
+            {
+                table.Cell().Element(CellStyle).Text($"No Target Outage Supplied");
+            }
 
             // Layer Actual Outage
             table.Cell().Element(CellStyle).Text("Actual Outage:");
             table.Cell().Element(CellStyle).Text($"{layer.ActualOutage} mm");
 
             // Layer Outage Difference 
-            table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text("Outage Difference:");
-            table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text($"{PlusOrMinusSymbol(layer)}{_vesselManager.CalculateOutageDiffereance(layer)} mm");
-
+            if (layer.TargetOutage != 0)
+            {
+                table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text("Outage Difference:");
+                table.Cell().Background(OutageVarienceColor(layer)).Element(CellStyle).Text($"{PlusOrMinusSymbol(layer)}{_vesselManager.CalculateOutageDiffereance(layer)} mm");
+            }
             // Layer Drum Number
             table.Cell().Element(CellStyle).Text("Total Drums:");
             table.Cell().Element(CellStyle).Text($"{layer.DrumQuanity}");
@@ -299,13 +308,16 @@ public class Report
             table.Cell().Element(CellStyle).Text("Drum Net Weight:");
             table.Cell().Element(CellStyle).Text($"{layer.DrumNetWeight} kg");
 
-            // Layer Loaded Mass
-            table.Cell().Element(CellStyle).Text("Total Layer Mass:");
-            table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerMass(layer)} kg");
+            if (layer.LayerType == LayerType.Catalyst)
+            {
+                // Layer Loaded Mass
+                table.Cell().Element(CellStyle).Text("Total Layer Mass:");
+                table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerMass(layer)} kg");
 
-            // Layer Density
-            table.Cell().Element(CellStyle).Text("Layer Density");
-            table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerDensity(layer):F2} kg/m3");
+                // Layer Density
+                table.Cell().Element(CellStyle).Text("Layer Density");
+                table.Cell().Element(CellStyle).Text($"{_vesselManager.CalculateLayerDensity(layer):F2} kg/m3");
+            }
 
             static IContainer CellStyle(IContainer container)
                 => container.Border(0.4f, Unit.Point).Padding(1);
